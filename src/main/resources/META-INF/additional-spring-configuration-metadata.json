@@ -1,0 +1,42 @@
+{"properties": [
+  {
+    "name": "insource.app.india.date.format",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.india.date.format'"
+  },
+  {
+    "name": "insource.app.us.date.format",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.us.date.format'"
+  },
+  {
+    "name": "insource.app.india.zone.id",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.india.zone.id'"
+  },
+  {
+    "name": "insource.app.us.zone.id",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.us.zone.id'"
+  },
+  {
+    "name": "insource.app.hr.role",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.hr.role'"
+  },
+  {
+    "name": "insource.app.supported_file_type",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.supported_file_type'"
+  },
+  {
+    "name": "insource.app.non_auth_apis",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.non_auth_apis'"
+  },
+  {
+    "name": "insource.app.swagger_apis",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.swagger_apis'"
+  }
+]}
