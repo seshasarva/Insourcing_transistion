@@ -87,7 +87,7 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 		return args -> {
 			HRFormRequest request = new HRFormRequest("1", "test", "test@tcs.com", "test", "INDIA");
 			hrService.register(request );
-			ObjectMapper objectMapper = new ObjectMapper();
+			/*
 			ObjectNode parent = objectMapper.createObjectNode();
 			ObjectNode euStatusMangement = objectMapper.createObjectNode();
 			ObjectNode euApplForm = objectMapper.createObjectNode();
@@ -104,7 +104,7 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 			crfEntity.setNoneuApplicationForm(noneuApplForm.toString());
 			crfEntity.setNoneuStatusManagement(noneuStatusMaangement.toString());
 			System.out.println("saving11"+objectMapper.writeValueAsString(crfEntity));
-			transistionService.saveCrf(crfEntity );
+			transistionService.saveCrf(crfEntity );*/
 		/*	parent.put("id", 1l);
 			parent.put("euApplicationForm", euApplForm.toString());
 			System.out.println(parent.toString());
@@ -115,32 +115,19 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 			*/			//System.out.println(euApplForm);
 			//System.out.println("saving11"+objectMapper.writeValueAsString(crfEntity));
 			
-			Path path = Paths.get("c:\\code\\excel.xlsx");
+			/*Path path = Paths.get("c:\\code\\excel.xlsx");
 			String name = "excel.xlsx";
 			String originalFileName = "excel.xlsx";
 			String contentType = "application/vnd.ms-excel";
 			byte[] content =  Files.readAllBytes(path);
 			System.out.println(content.length);
 			MultipartFile result = new MockMultipartFile(name,
-                    originalFileName, contentType, content);
-			transistionService.saveCrf(crfEntity );
-			transistionService.uploadInterviewSchedule(result, 1l);
-			
+                    originalFileName, contentType, content);*/
+			//transistionService.saveCrf(crfEntity );
+			//transistionService.uploadInterviewSchedule(result, 1l);
 		};
 	}
 	
-	public ObjectNode updatePref(ObjectNode json) {
-		json.put("fn", false);
-		json.put("mn", false);
-		json.put("ln", false);
-		json.put("cn", false);
-		json.put("skills", false);
-		json.put("ct", false);
-		json.put("dob", false);
-		json.put("loc", false);
-		json.put("pwd", false);
-		json.put("confpwd", false);
-		return json;
-	}
+	
 
 }
