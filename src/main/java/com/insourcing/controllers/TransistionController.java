@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.insourcing.entity.CRFEntity;
 import com.insourcing.entity.ContactUsEntity;
 import com.insourcing.entity.ExploreTcsEntity;
@@ -70,13 +72,13 @@ public class TransistionController {
 	}
 	
 	@GetMapping("/fetchCrf")
-	public CRFEntity fetchCrf(@RequestParam long id) {
+	public CRFEntity fetchCrf(@RequestParam long id) throws JsonMappingException, JsonProcessingException {
 		return service.fetchCrf(id);
 	}
 	
 	@PostMapping("/saveCrf")
-	public boolean saveCrf(@RequestBody CRFEntity entity) {
-		return service.saveCrf(entity);
+	public boolean saveCrf(@RequestBody String json, @RequestParam long id, @RequestParam  String field) throws JsonMappingException, JsonProcessingException {
+		return service.saveCrf(id, json, field);
 	}
 	
 	@GetMapping("/fetchInterviewSchedule")
