@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -154,18 +156,33 @@ public class TransistionService {
 		return true;
 	}
 	
-	public boolean saveCrf(CRFEntity crfEntity) {
-		crfRepo.save(crfEntity);
+	public boolean saveCrf(long id, String json, String field) throws JsonMappingException, JsonProcessingException {
+		Optional<CRFEntity> deal = crfRepo.findById(id);
+		CRFEntity entity = null;
+		if(null != deal && deal.isPresent()) {
+			entity = deal.get();
+		}else {
+			entity = defaultCrfJson();
+			entity.setId(id);
+		}
+		switch (field) {
+		case "euStatusMangement": entity.setEuStatusManagement(json);break;
+		case "noneuStatusMaangement":entity.setNoneuApplicationForm(json);break;
+		case "euApplForm":entity.setEuApplicationForm(json);break;
+		case "noneuApplForm":entity.setNoneuApplicationForm(json);break;
+		}
+		crfRepo.save(entity);
 		return true;
 	}
 	
-	public CRFEntity fetchCrf(long id) {
+	public CRFEntity fetchCrf(long id) throws JsonMappingException, JsonProcessingException {
 		Optional<CRFEntity> deal = crfRepo.findById(id);
 		if(null != deal && deal.isPresent()) {
 			CRFEntity crf = deal.get();
 			return crf;
+		}else {
+			return defaultCrfJson();
 		}
-		return null;
 	}
 	
 
@@ -258,6 +275,38 @@ public class TransistionService {
 				.contentType(MediaType.parseMediaType("application/octet-stream")).body(file);
 
 	}
+	
+	public CRFEntity defaultCrfJson() throws JsonMappingException, JsonProcessingException {
+		CRFEntity crfEntity = new CRFEntity();
+		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectNode euStatusMangement = objectMapper.createObjectNode();
+		ObjectNode euApplForm = objectMapper.createObjectNode();
+		ObjectNode noneuStatusMaangement = objectMapper.createObjectNode();
+		ObjectNode noneuApplForm = objectMapper.createObjectNode();
+		crfEntity.setEuApplicationForm(updatePref(euApplForm));
+		crfEntity.setEuStatusManagement(updatePref(euStatusMangement));
+		crfEntity.setNoneuApplicationForm(updatePref(noneuApplForm));
+		crfEntity.setNoneuStatusManagement(updatePref(noneuStatusMaangement));
+		crfEntity.setId(1l);
+		return crfEntity;
+
+	}
+	
+	public String updatePref(ObjectNode json) {
+		json.put("fn", false);
+		json.put("mn", false);
+		json.put("ln", false);
+		json.put("cn", false);
+		json.put("skills", false);
+		json.put("ct", false);
+		json.put("dob", false);
+		json.put("loc", false);
+		json.put("pwd", false);
+		json.put("confpwd", false);
+		return json.toString();
+	}
+	
+	
 	
 	@Autowired
 	ContactUsRepo contactUsRepo;
