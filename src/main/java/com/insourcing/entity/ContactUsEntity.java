@@ -19,6 +19,8 @@ public class ContactUsEntity {
 	@Column
 	private String name;
 	@Column
+	private String phone;	
+	@Column
 	private String emailId;
 	@Column
 	private byte[] img;
@@ -57,10 +59,13 @@ public class ContactUsEntity {
 	}
 	public void setImg(byte[] img) {
 		this.img = img;
+	}	
+	public String getPhone() {
+		return phone;
 	}
-	
-	
-	
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	
 	
 }
