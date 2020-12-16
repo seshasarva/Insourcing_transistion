@@ -283,9 +283,9 @@ public class TransistionService {
 		ObjectNode euApplForm = objectMapper.createObjectNode();
 		ObjectNode noneuStatusMaangement = objectMapper.createObjectNode();
 		ObjectNode noneuApplForm = objectMapper.createObjectNode();
-		crfEntity.setEuApplicationForm(updatePref(euApplForm));
+		crfEntity.setEuApplicationForm(updateApplForm());
 		crfEntity.setEuStatusManagement(updatePref(euStatusMangement));
-		crfEntity.setNoneuApplicationForm(updatePref(noneuApplForm));
+		crfEntity.setNoneuApplicationForm(updateApplForm());
 		crfEntity.setNoneuStatusManagement(updatePref(noneuStatusMaangement));
 		crfEntity.setId(1l);
 		return crfEntity;
@@ -293,17 +293,25 @@ public class TransistionService {
 	}
 	
 	public String updatePref(ObjectNode json) {
-		json.put("fn", false);
-		json.put("mn", false);
-		json.put("ln", false);
-		json.put("cn", false);
-		json.put("skills", false);
-		json.put("ct", false);
-		json.put("dob", false);
-		json.put("loc", false);
-		json.put("pwd", false);
-		json.put("confpwd", false);
+		ObjectMapper objectMapper = new ObjectMapper();
+		ObjectNode node = objectMapper.createObjectNode();
+		node.put("display", false);
+		node.put("type", "text");
+		json.set("fn", node);
+		json.set("mn", node);
+		json.set("ln", node);
+		json.set("cn", node);
+		json.set("skills", node);
+		json.set("ct", node);
+		json.set("dob", node);
+		json.set("loc", node);
+		json.set("pwd", node);
+		json.set("confpwd", node);
 		return json.toString();
+	}
+	
+	public String updateApplForm() {
+		return "{\"title\":\"\",\"firstName\":\"yes\",\"middleName\":\"no\",\"lastName\":\"no\",\"contactNo\":\"yes\",\"emailid\":\"\",\"streetAddress\":\"yes\",\"apartmentUnit\":\"\",\"state\":\"\",\"zipCode\":\"\",\"city\":\"\",\"country\":\"Afganistan\",\"date\":\"\",\"dateAvailable\":\"\",\"currentWorkLocation\":\"\",\"totalExpYrs\":\"\",\"totalExpMts\":\"\",\"totalRelExpYrs\":\"\",\"totalRelExpMts\":\"\",\"exTCSEmployee\":\"\",\"under18ProvideWorkPermit\":\"\",\"offerEmpExtDemWorkUS\":\"\",\"reqSponsorship\":\"\",\"ifYesWhen\":\"\",\"exTCSStartDate\":\"\",\"exTCSEndDate\":\"\",\"companies\":[{\"companyName\":\"\",\"address\":\"\",\"supervisorName\":\"\",\"supervisorContact\":\"\",\"jobTitle\":\"\",\"responsibilities\":\"\",\"startDate\":\"\",\"endDate\":\"\",\"reasonForLeaving\":\"\",\"comMayContactSupervisorRef\":\"Yes\"}],\"courses\":[{\"educationalLevel\":\"\",\"instituteName\":\"\",\"insAddress\":\"\",\"graduate\":\"Yes\",\"degree\":\"\",\"cos\":\"\",\"GPA\":\"\"}],\"skills\":[{\"skillTech\":\"\",\"description\":\"\"}],\"references\":[{\"fullName\":\"\",\"relationship\":\"\",\"comName\":\"\",\"contactNo\":\"\",\"emailId\":\"\",\"address\":\"\"}],\"militaryExp\":\"\",\"signName\":\"\",\"signature\":\"\",\"signDate\":\"\",\"lawSignature\":\"\"}";
 	}
 	
 	
