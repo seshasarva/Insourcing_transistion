@@ -14,51 +14,52 @@ public class ExploreTcsEntity {
 	private Long id;
 
 	@Column(name = "tile1")
-	private boolean isTile1DisplayEligible;
+	private String tile1;
 	@Column(name = "tile2")
-	private boolean isTile2DisplayEligible;
+	private boolean tile2;
 	@Column(name = "tile3")
-	private boolean isTile3DisplayEligible;
+	private boolean tile3;
 	@Column(name = "tile4")
-	private boolean isTile4DisplayEligible;
+	private boolean tile4;
 	@Column(name = "tile5")
-	private boolean isTile5DisplayEligible;
-	public Long getId() {
-		return id;
+	private boolean tile5;
+	public String getTile1() {
+		return tile1;
+	}
+	public void setTile1(String tile1) {
+		this.tile1 = tile1;
+	}
+	public boolean isTile2() {
+		return tile2;
+	}
+	public void setTile2(boolean tile2) {
+		this.tile2 = tile2;
+	}
+	public boolean isTile3() {
+		return tile3;
+	}
+	public void setTile3(boolean tile3) {
+		this.tile3 = tile3;
+	}
+	public boolean isTile4() {
+		return tile4;
+	}
+	public void setTile4(boolean tile4) {
+		this.tile4 = tile4;
+	}
+	public boolean isTile5() {
+		return tile5;
+	}
+	public void setTile5(boolean tile5) {
+		this.tile5 = tile5;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public boolean isTile1DisplayEligible() {
-		return isTile1DisplayEligible;
+	public Long getId() {
+		return id;
 	}
-	public void setTile1DisplayEligible(boolean isTile1DisplayEligible) {
-		this.isTile1DisplayEligible = isTile1DisplayEligible;
-	}
-	public boolean isTile2DisplayEligible() {
-		return isTile2DisplayEligible;
-	}
-	public void setTile2DisplayEligible(boolean isTile2DisplayEligible) {
-		this.isTile2DisplayEligible = isTile2DisplayEligible;
-	}
-	public boolean isTile3DisplayEligible() {
-		return isTile3DisplayEligible;
-	}
-	public void setTile3DisplayEligible(boolean isTile3DisplayEligible) {
-		this.isTile3DisplayEligible = isTile3DisplayEligible;
-	}
-	public boolean isTile4DisplayEligible() {
-		return isTile4DisplayEligible;
-	}
-	public void setTile4DisplayEligible(boolean isTile4DisplayEligible) {
-		this.isTile4DisplayEligible = isTile4DisplayEligible;
-	}
-	public boolean isTile5DisplayEligible() {
-		return isTile5DisplayEligible;
-	}
-	public void setTile5DisplayEligible(boolean isTile5DisplayEligible) {
-		this.isTile5DisplayEligible = isTile5DisplayEligible;
-	}
+	
 	
 	
 }
