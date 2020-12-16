@@ -16,43 +16,45 @@ public class ExploreTcsEntity {
 	@Column(name = "tile1")
 	private String tile1;
 	@Column(name = "tile2")
-	private boolean tile2;
+	private String tile2;
 	@Column(name = "tile3")
-	private boolean tile3;
+	private String tile3;
 	@Column(name = "tile4")
-	private boolean tile4;
+	private String tile4;
 	@Column(name = "tile5")
-	private boolean tile5;
+	private String tile5;
+	public String getTile2() {
+		return tile2;
+	}
+	public void setTile2(String tile2) {
+		this.tile2 = tile2;
+	}
+	public String getTile3() {
+		return tile3;
+	}
+	public void setTile3(String tile3) {
+		this.tile3 = tile3;
+	}
+	public String getTile4() {
+		return tile4;
+	}
+	public void setTile4(String tile4) {
+		this.tile4 = tile4;
+	}
+	public String getTile5() {
+		return tile5;
+	}
+	public void setTile5(String tile5) {
+		this.tile5 = tile5;
+	}
 	public String getTile1() {
 		return tile1;
 	}
 	public void setTile1(String tile1) {
 		this.tile1 = tile1;
 	}
-	public boolean isTile2() {
-		return tile2;
-	}
-	public void setTile2(boolean tile2) {
-		this.tile2 = tile2;
-	}
-	public boolean isTile3() {
-		return tile3;
-	}
-	public void setTile3(boolean tile3) {
-		this.tile3 = tile3;
-	}
-	public boolean isTile4() {
-		return tile4;
-	}
-	public void setTile4(boolean tile4) {
-		this.tile4 = tile4;
-	}
-	public boolean isTile5() {
-		return tile5;
-	}
-	public void setTile5(boolean tile5) {
-		this.tile5 = tile5;
-	}
+	
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
