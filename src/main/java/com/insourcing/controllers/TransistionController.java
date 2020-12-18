@@ -52,6 +52,7 @@ public class TransistionController {
 	@PostMapping("/saveContactUsImage")
 	public boolean saveContactUsImage(@RequestPart("file") MultipartFile file,
 			@RequestParam long id, @RequestParam String tileName) {
+		
 		return service.saveContactUsImage(file, id, tileName);
 	}
 	

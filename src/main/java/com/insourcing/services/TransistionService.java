@@ -25,7 +25,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.insourcing.entity.CRFEntity;
 import com.insourcing.entity.ContactUsEntity;
-import com.insourcing.entity.DealAttachment;
+import com.insourcing.entity.DealEntity;
 import com.insourcing.entity.ExploreTcsEntity;
 import com.insourcing.entity.InterviewScheduleEntity;
 import com.insourcing.entity.JourneyEntity;
@@ -72,7 +72,19 @@ public class TransistionService {
 	
 	public boolean saveContactUsEntity(List<ContactUsEntity> entities) {
 		try {
-			contactUsRepo.saveAll(entities);
+			for(ContactUsEntity entity : entities) {
+				List<ContactUsEntity> alldeals = contactUsRepo.findAll();
+				for(ContactUsEntity each : alldeals) {
+					if(each.getId() == entity.getId() 
+							&& each.getTileName().equalsIgnoreCase(entity.getTileName())) {
+						each.setEmailId(entity.getEmailId());
+						each.setHeader(entity.getHeader());
+						each.setName(entity.getName());
+						each.setPhone(entity.getPhone());
+						contactUsRepo.save(each);
+					}
+				}				
+			}
 			return true;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -82,11 +94,24 @@ public class TransistionService {
 	@Transactional
 	public boolean saveContactUsImage(MultipartFile file, long id, String tileName) {
 		try {	
-			Optional<ContactUsEntity> deal = contactUsRepo.findById(id);
-			if(null != deal && deal.isPresent()) {
-				ContactUsEntity dealEntity = deal.get();
+			boolean found = false;
+			List<ContactUsEntity> alldeals = contactUsRepo.findAll();
+			for(ContactUsEntity each : alldeals) {
+					if(each.getId() == id 
+							&& each.getTileName().equalsIgnoreCase(tileName) ) {
+				ContactUsEntity dealEntity = each;
 				dealEntity.setImg(file.getBytes());
 				contactUsRepo.save(dealEntity);
+				found  = true;
+				}
+			}
+			if(!found){
+				ContactUsEntity entity = new ContactUsEntity();
+				entity.setId(id);
+				entity.setTileName(tileName);
+				entity.setImg(file.getBytes());
+				contactUsRepo.save(entity);
+
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -210,8 +235,8 @@ public class TransistionService {
 			for(Row row : sheet) {
 				if(row.getRowNum()==0) continue;
 				ObjectNode parentNode = objectMapper.createObjectNode();
-				parentNode.put("Emp no", row.getCell(0).toString());
-				parentNode.put("Start Date", row.getCell(1).toString());
+				parentNode.put("Emp_no", row.getCell(0).toString());
+				parentNode.put("Start_Date", row.getCell(1).toString());
 				parentNode.put("Name", row.getCell(2).toString());
 				parentNode.put("Grade", row.getCell(3).toString());
 				parentNode.put("Access", row.getCell(4).toString());
