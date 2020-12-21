@@ -73,17 +73,8 @@ public class TransistionService {
 	public boolean saveContactUsEntity(List<ContactUsEntity> entities) {
 		try {
 			for(ContactUsEntity entity : entities) {
-				List<ContactUsEntity> alldeals = contactUsRepo.findAll();
-				for(ContactUsEntity each : alldeals) {
-					if(each.getId() == entity.getId() 
-							&& each.getTileName().equalsIgnoreCase(entity.getTileName())) {
-						each.setEmailId(entity.getEmailId());
-						each.setHeader(entity.getHeader());
-						each.setName(entity.getName());
-						each.setPhone(entity.getPhone());
-						contactUsRepo.save(each);
-					}
-				}				
+				contactUsRepo.save(entity);	
+				
 			}
 			return true;
 		}catch(Exception e) {
