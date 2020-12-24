@@ -23,8 +23,7 @@ import com.insourcing.model.DealFileAttachment;
 public class DealEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 	@Column(name = "month_of_creation")
 	String monthOfCreation;
 	@Column(name = "oppurtunity_id")
@@ -135,11 +134,12 @@ public class DealEntity {
 	@Transient
 	List<Integer> attachmentIds = new ArrayList<Integer>();
 
-	public Long getId() {
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

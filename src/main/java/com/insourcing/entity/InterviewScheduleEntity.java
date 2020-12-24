@@ -9,13 +9,13 @@ import javax.persistence.Table;
 @Table(name = "interview_schedule")
 public class InterviewScheduleEntity {
 	@Id
-	private Long id;
+	private String id;
 	@Column
 	private String data;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getData() {

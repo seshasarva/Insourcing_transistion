@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.insourcing.entity.CRFEntity;
 import com.insourcing.entity.ContactUsEntity;
 import com.insourcing.entity.ExploreTcsEntity;
@@ -30,7 +31,7 @@ public class TransistionController {
 	TransistionService service;
 	
 	@GetMapping("/fetchExploreTcsDetails")
-	public ExploreTcsEntity fetchExploreTcsDetails(@RequestParam long id) {
+	public ExploreTcsEntity fetchExploreTcsDetails(@RequestParam String id) {
 		return service.fetchExploreTcsDetails(id);
 	}
 	
@@ -39,8 +40,15 @@ public class TransistionController {
 		return service.saveExploreTcs(entity);
 	}
 	
+	@PostMapping("/uploadExploreTcsAttachments")
+	public boolean uploadExploreTcsAttachments(@RequestPart("file") MultipartFile file,
+			@RequestParam String id, @RequestParam String field) {
+		
+		return service.uploadExploreTcsFile(file, id, field);
+	}
+	
 	@GetMapping("/fetchContactUsDetails")
-	public List<ContactUsEntity> fetchContactUsDetails(@RequestParam long id) {
+	public List<ContactUsEntity> fetchContactUsDetails(@RequestParam String id) {
 		return service.fetchContactUsDetails(id);
 	}
 	
@@ -51,13 +59,13 @@ public class TransistionController {
 	
 	@PostMapping("/saveContactUsImage")
 	public boolean saveContactUsImage(@RequestPart("file") MultipartFile file,
-			@RequestParam long id, @RequestParam String tileName) {
+			@RequestParam String id, @RequestParam String tileName) {
 		
 		return service.saveContactUsImage(file, id, tileName);
 	}
 	
 	@GetMapping("/fetchMyJourneyDetails")
-	public JourneyEntity fetchMyJourneyDetails(@RequestParam long id) {
+	public JourneyEntity fetchMyJourneyDetails(@RequestParam String id) {
 		return service.fetchMyJourneyDetails(id);
 	}
 	
@@ -68,34 +76,39 @@ public class TransistionController {
 	
 	@PostMapping("/uploadJourneyAttachments")
 	public boolean uploadJourneyAttachments(@RequestPart("file") MultipartFile file,
-			@RequestParam long id, @RequestParam String fieldName) {
+			@RequestParam String id, @RequestParam String fieldName) {
 		return service.uploadJourneyAttachments(file, id, fieldName);
 	}
 	
 	@GetMapping("/fetchCrf")
-	public CRFEntity fetchCrf(@RequestParam long id) throws JsonMappingException, JsonProcessingException {
+	public CRFEntity fetchCrf(@RequestParam String id) throws JsonMappingException, JsonProcessingException {
 		return service.fetchCrf(id);
 	}
 	
 	@PostMapping("/saveCrf")
-	public boolean saveCrf(@RequestBody String json, @RequestParam long id, @RequestParam  String field) throws JsonMappingException, JsonProcessingException {
+	public boolean saveCrf(@RequestBody String json, @RequestParam String id, @RequestParam  String field) throws JsonMappingException, JsonProcessingException {
 		return service.saveCrf(id, json, field);
 	}
 	
 	@GetMapping("/fetchInterviewSchedule")
-	public InterviewScheduleEntity fetchInterviewSchedule(@RequestParam long id) {
+	public InterviewScheduleEntity fetchInterviewSchedule(@RequestParam String id) {
 		return service.fetchInterviewSchedule(id);
 	}
 	
 	@PostMapping("/uploadInterviewSchedule")
 	public boolean uploadInterviewSchedule(@RequestPart("file") MultipartFile file,
-			@RequestParam long id) {
+			@RequestParam String id) {
 		return service.uploadInterviewSchedule(file, id);
 	}
 	
 	@GetMapping("/download")
-	public ResponseEntity<InputStreamResource> download(@RequestParam Long id,
+	public ResponseEntity<InputStreamResource> download(@RequestParam String id,
 			@RequestParam String fieldName) {
 		return service.download(id, fieldName);
+	}	
+	
+	@PostMapping("/fetchRecruiterProfile")
+	public ObjectNode fetchRecruiterProfile(String filter) {
+		return service.fetchRecruiterDetails();
 	}	
 }

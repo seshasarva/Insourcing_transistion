@@ -31,15 +31,17 @@ public class DealsController {
 
 	@PostMapping("/save")
 	public boolean create(HttpServletRequest request, @RequestBody DealEntity deal) {
+		boolean result = false;
 		try {
 			System.out.println("welcome---" + deal.getMonthOfCreation());
 			String username = (String) request.getAttribute("username");
-			service.create(deal, username);
+			result = service.create(deal, username);
 		} catch (Exception e) {
 			System.out.println("Excepttion in create/save :" + e);
+			e.printStackTrace();
 			return false;
 		}
-		return true;
+		return result;
 	}
 
 	@GetMapping("/onLoadFields")
@@ -54,7 +56,7 @@ public class DealsController {
 	}
 
 	@GetMapping("/fetchDeal")
-	public DealEntity fetchDeal(@RequestParam long id) {
+	public DealEntity fetchDeal(@RequestParam String id) {
 		return service.fetch(id);
 	}
 

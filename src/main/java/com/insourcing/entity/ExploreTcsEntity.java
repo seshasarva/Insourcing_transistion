@@ -2,8 +2,6 @@ package com.insourcing.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,57 +9,77 @@ import javax.persistence.Table;
 @Table(name = "explore_tcs_table")
 public class ExploreTcsEntity {
 	@Id
-	private Long id;
+	private String id;
 
-	@Column(name = "tile1")
-	private String tile1;
-	@Column(name = "tile2")
-	private String tile2;
-	@Column(name = "tile3")
-	private String tile3;
-	@Column(name = "tile4")
-	private String tile4;
-	@Column(name = "tile5")
-	private String tile5;
-	public String getTile2() {
-		return tile2;
-	}
-	public void setTile2(String tile2) {
-		this.tile2 = tile2;
-	}
-	public String getTile3() {
-		return tile3;
-	}
-	public void setTile3(String tile3) {
-		this.tile3 = tile3;
-	}
-	public String getTile4() {
-		return tile4;
-	}
-	public void setTile4(String tile4) {
-		this.tile4 = tile4;
-	}
-	public String getTile5() {
-		return tile5;
-	}
-	public void setTile5(String tile5) {
-		this.tile5 = tile5;
-	}
-	public String getTile1() {
-		return tile1;
-	}
-	public void setTile1(String tile1) {
-		this.tile1 = tile1;
-	}
-	
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Long getId() {
+	@Column(name = "cover_image")
+	private byte[] coverImage;
+	@Column(name = "cover_image_file")
+	private String coverImageFile;
+	@Column(name = "poster")
+	private byte[] poster;
+	@Column(name = "poster_file")
+	private String posterFile;
+	@Column(name = "video")
+	private byte[] video;
+	@Column(name = "video_file")
+	private String videoFile;
+	@Column(name = "content")
+	private String content;
+	@Column(name = "benifits")
+	private String benifits;
+	public String getId() {
 		return id;
 	}
-	
-	
+	public void setId(String id) {
+		this.id = id;
+	}
+	public byte[] getCoverImage() {
+		return coverImage;
+	}
+	public void setCoverImage(byte[] coverImage) {
+		this.coverImage = coverImage;
+	}
+	public String getCoverImageFile() {
+		return coverImageFile;
+	}
+	public void setCoverImageFile(String coverImageFile) {
+		this.coverImageFile = coverImageFile;
+	}
+	public byte[] getPoster() {
+		return poster;
+	}
+	public void setPoster(byte[] poster) {
+		this.poster = poster;
+	}
+	public String getPosterFile() {
+		return posterFile;
+	}
+	public void setPosterFile(String posterFile) {
+		this.posterFile = posterFile;
+	}
+	public byte[] getVideo() {
+		return video;
+	}
+	public void setVideo(byte[] video) {
+		this.video = video;
+	}
+	public String getVideoFile() {
+		return videoFile;
+	}
+	public void setVideoFile(String videoFile) {
+		this.videoFile = videoFile;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getBenifits() {
+		return benifits;
+	}
+	public void setBenifits(String benifits) {
+		this.benifits = benifits;
+	}
 	
 }

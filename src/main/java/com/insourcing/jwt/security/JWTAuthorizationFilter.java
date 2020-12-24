@@ -36,7 +36,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
 		System.out.println("doFilterInternal came here----");
 		try {
-			/*if (checkJWTToken(request, response)) {
+			if (checkJWTToken(request, response)) {
 				Claims claims = validateToken(request);
 				if (claims.get("authorities") != null) {
 					setUpSpringAuthentication(claims);
@@ -45,7 +45,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 				}
 			} else {
 				SecurityContextHolder.clearContext();
-			}*/
+			}
 			chain.doFilter(request, response);
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
 			response.setStatus(HttpServletResponse.SC_FORBIDDEN);

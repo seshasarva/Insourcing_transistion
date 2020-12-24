@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @IdClass(ContactUsId.class)
 public class ContactUsEntity {
 	@Id
-	private Long id;
+	private String id;
 	@Id
 	private String tileName;
 	@Column
@@ -24,10 +24,10 @@ public class ContactUsEntity {
 	private String emailId;
 	@Column
 	private byte[] img;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getTileName() {

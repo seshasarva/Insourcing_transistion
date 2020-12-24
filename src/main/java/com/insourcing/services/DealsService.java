@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Random;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,9 +86,12 @@ public class DealsService {
 //	}
 
 	@Transactional
-	public void create(DealEntity deal, String emailId) {
+	public boolean create(DealEntity deal, String emailId) {
 		String username = getUserName(emailId);
 		System.out.println("username is: " + username);
+		Random random =  new Random();
+		int randomId = random.nextInt(10000); 
+		deal.setId("DL"+randomId);
 		deal.setDealLead(username);
 		deal.setHrTransitionManager(username);
 		Calendar canlendar = Calendar.getInstance();
@@ -99,7 +102,7 @@ public class DealsService {
 		}
 
 		DealEntity createdDeal = repo.save(deal);
-		Long dealId = createdDeal.getId();
+		String dealId = createdDeal.getId();
 		for (long attachmentId : deal.getAttachmentIds()) {
 			Optional<DealAttachment> dealAttachment = dealAttachmentRepo.findById(attachmentId);
 			if (null != dealAttachment && null != dealAttachment.get()) {
@@ -107,7 +110,7 @@ public class DealsService {
 			}
 		}
 		System.out.println("Deal created");
-
+		return true;
 	}
 
 	public List<DealEntity> fetchAll() {
@@ -148,7 +151,7 @@ public class DealsService {
 
 	}
 
-	public DealEntity fetch(long id) {
+	public DealEntity fetch(String id) {
 		DealEntity deal = null;
 		try {
 			Optional<DealEntity> dealEntity = repo.findById(id);
@@ -179,7 +182,7 @@ public class DealsService {
 		String eachfileName = each.getFileName();
 		f.setAccessible(true);
 		DealFileAttachment attachment = new DealFileAttachment();
-		attachment.setId(each.getId());
+		//attachment.setId(each.getId());
 		attachment.setName(eachfileName);
 		System.out.println("f.getType().getName()---" + fieldName);
 		if (fieldName.equals("dealAttachments") && "dealNoteFile".equals(eachFieldName)) {
@@ -208,7 +211,7 @@ public class DealsService {
 		return username;
 	}
 
-	public long deleteFile(Long id) {
+	public Long deleteFile(Long id) {
 		dealAttachmentRepo.deleteById(id);
 		System.out.println("deleted the id successfully------" + id);
 		return id;

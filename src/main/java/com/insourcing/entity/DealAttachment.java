@@ -19,7 +19,7 @@ public class DealAttachment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;	
 	@Column(name = "deal_id")
-	private Long dealId;
+	private String dealId;
 	@Column(name = "field_name")
 	String fieldName;
 	@Column(name = "file_name")
@@ -32,10 +32,11 @@ public class DealAttachment {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getDealId() {
+	
+	public String getDealId() {
 		return dealId;
 	}
-	public void setDealId(Long dealId) {
+	public void setDealId(String dealId) {
 		this.dealId = dealId;
 	}
 	public String getFieldName() {

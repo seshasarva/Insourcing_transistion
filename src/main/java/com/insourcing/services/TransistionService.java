@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.insourcing.entity.CRFEntity;
 import com.insourcing.entity.ContactUsEntity;
-import com.insourcing.entity.DealEntity;
 import com.insourcing.entity.ExploreTcsEntity;
 import com.insourcing.entity.InterviewScheduleEntity;
 import com.insourcing.entity.JourneyEntity;
@@ -38,7 +37,7 @@ import com.insourcing.repository.JourneyRepo;
 @Service
 public class TransistionService {
 	
-	public ExploreTcsEntity fetchExploreTcsDetails(long id) {
+	public ExploreTcsEntity fetchExploreTcsDetails(String id) {
 		Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(id);
 		try {
 			if(null != deal && deal.isPresent()) {
@@ -52,6 +51,18 @@ public class TransistionService {
 	
 	public boolean saveExploreTcs(ExploreTcsEntity exploreTcsEntity) {
 		try {
+			ExploreTcsEntity entity;
+			Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(exploreTcsEntity.getId());
+			if(null != deal && deal.isPresent()) {
+				entity = deal.get();
+				
+				
+			}else {
+				entity = new ExploreTcsEntity();
+				entity.setId(exploreTcsEntity.getId());
+			}
+			entity.setBenifits(exploreTcsEntity.getBenifits());
+			entity.setContent(exploreTcsEntity.getContent());
 			exploreTcsRepo.save(exploreTcsEntity);
 			return true;
 		}catch(Exception e) {
@@ -60,7 +71,40 @@ public class TransistionService {
 		return false;
 	}
 	
-	public List<ContactUsEntity> fetchContactUsDetails(long id) {
+	@Transactional
+	public boolean uploadExploreTcsFile(MultipartFile file, String id, String field) {
+		try {
+		ExploreTcsEntity entity;
+		Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(id);
+		if(null != deal && deal.isPresent()) {
+			entity = deal.get();
+		}else {
+			entity = new ExploreTcsEntity();
+			entity.setId(id);
+		}
+			switch(field) {
+				case "coverimage":
+					entity.setCoverImage(file.getBytes());
+					entity.setCoverImageFile(file.getOriginalFilename());
+					break;
+				case "poster":
+					entity.setPoster(file.getBytes());
+					entity.setPosterFile(file.getOriginalFilename());
+					break;
+				case "video":
+					entity.setVideo(file.getBytes());
+					entity.setVideoFile(file.getOriginalFilename());
+					break;				
+			}
+		exploreTcsRepo.save(entity);
+		return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public List<ContactUsEntity> fetchContactUsDetails(String id) {
 		List<ContactUsEntity> deals = contactUsRepo.findAll();
 		List<ContactUsEntity> filtered = new ArrayList<ContactUsEntity>();
 		for(ContactUsEntity deal : deals) {
@@ -83,7 +127,7 @@ public class TransistionService {
 		return false;
 	}
 	@Transactional
-	public boolean saveContactUsImage(MultipartFile file, long id, String tileName) {
+	public boolean saveContactUsImage(MultipartFile file, String id, String tileName) {
 		try {	
 			boolean found = false;
 			List<ContactUsEntity> alldeals = contactUsRepo.findAll();
@@ -111,7 +155,7 @@ public class TransistionService {
 		return true;
 	}
 	
-	public JourneyEntity fetchMyJourneyDetails(long id) {
+	public JourneyEntity fetchMyJourneyDetails(String id) {
 		Optional<JourneyEntity> entity = journeyRepo.findById(id);
 		if(null != entity && null != entity.get()) {
 			JourneyEntity journeyEntity = entity.get();
@@ -131,7 +175,7 @@ public class TransistionService {
 		return true;
 	}
 	@Transactional
-	public boolean uploadJourneyAttachments(MultipartFile file, long id, String fieldName) {
+	public boolean uploadJourneyAttachments(MultipartFile file, String id, String fieldName) {
 		try {
 			Optional<JourneyEntity> entity = journeyRepo.findById(id);
 			if(null != entity && entity.isPresent()) {
@@ -172,7 +216,7 @@ public class TransistionService {
 		return true;
 	}
 	
-	public boolean saveCrf(long id, String json, String field) throws JsonMappingException, JsonProcessingException {
+	public boolean saveCrf(String id, String json, String field) throws JsonMappingException, JsonProcessingException {
 		Optional<CRFEntity> deal = crfRepo.findById(id);
 		CRFEntity entity = null;
 		if(null != deal && deal.isPresent()) {
@@ -191,7 +235,7 @@ public class TransistionService {
 		return true;
 	}
 	
-	public CRFEntity fetchCrf(long id) throws JsonMappingException, JsonProcessingException {
+	public CRFEntity fetchCrf(String id) throws JsonMappingException, JsonProcessingException {
 		Optional<CRFEntity> deal = crfRepo.findById(id);
 		if(null != deal && deal.isPresent()) {
 			CRFEntity crf = deal.get();
@@ -203,7 +247,7 @@ public class TransistionService {
 	
 
 	
-	public InterviewScheduleEntity fetchInterviewSchedule(long id) {
+	public InterviewScheduleEntity fetchInterviewSchedule(String id) {
 		Optional<InterviewScheduleEntity> deal = interviewScheduleRepo.findById(id);
 		if(null != deal && null != deal.get()) {
 			return deal.get();
@@ -216,7 +260,7 @@ public class TransistionService {
 		return true;
 	}
 	
-	public boolean uploadInterviewSchedule(MultipartFile file, long id) {
+	public boolean uploadInterviewSchedule(MultipartFile file, String id) {
 		try {
 			XSSFWorkbook wb  = new XSSFWorkbook(file.getInputStream());
 			XSSFSheet sheet = wb.getSheetAt(0);
@@ -244,7 +288,7 @@ public class TransistionService {
 		return true;
 	}
 	
-	public ResponseEntity<InputStreamResource> download(Long id, String fieldName) {
+	public ResponseEntity<InputStreamResource> download(String id, String fieldName) {
 		System.out.println("came here---");
 		byte[] bytes = null;
 		InputStreamResource file = null;
@@ -303,7 +347,7 @@ public class TransistionService {
 		crfEntity.setEuStatusManagement(updatePref(euStatusMangement));
 		crfEntity.setNoneuApplicationForm(updateApplForm());
 		crfEntity.setNoneuStatusManagement(updatePref(noneuStatusMaangement));
-		crfEntity.setId(1l);
+		crfEntity.setId("deal1");
 		return crfEntity;
 
 	}
@@ -330,6 +374,23 @@ public class TransistionService {
 		return "{\"title\":\"\",\"firstName\":\"yes\",\"middleName\":\"no\",\"lastName\":\"no\",\"contactNo\":\"yes\",\"emailid\":\"\",\"streetAddress\":\"yes\",\"apartmentUnit\":\"\",\"state\":\"\",\"zipCode\":\"\",\"city\":\"\",\"country\":\"Afganistan\",\"date\":\"\",\"dateAvailable\":\"\",\"currentWorkLocation\":\"\",\"totalExpYrs\":\"\",\"totalExpMts\":\"\",\"totalRelExpYrs\":\"\",\"totalRelExpMts\":\"\",\"exTCSEmployee\":\"\",\"under18ProvideWorkPermit\":\"\",\"offerEmpExtDemWorkUS\":\"\",\"reqSponsorship\":\"\",\"ifYesWhen\":\"\",\"exTCSStartDate\":\"\",\"exTCSEndDate\":\"\",\"companies\":[{\"companyName\":\"\",\"address\":\"\",\"supervisorName\":\"\",\"supervisorContact\":\"\",\"jobTitle\":\"\",\"responsibilities\":\"\",\"startDate\":\"\",\"endDate\":\"\",\"reasonForLeaving\":\"\",\"comMayContactSupervisorRef\":\"Yes\"}],\"courses\":[{\"educationalLevel\":\"\",\"instituteName\":\"\",\"insAddress\":\"\",\"graduate\":\"Yes\",\"degree\":\"\",\"cos\":\"\",\"GPA\":\"\"}],\"skills\":[{\"skillTech\":\"\",\"description\":\"\"}],\"references\":[{\"fullName\":\"\",\"relationship\":\"\",\"comName\":\"\",\"contactNo\":\"\",\"emailId\":\"\",\"address\":\"\"}],\"militaryExp\":\"\",\"signName\":\"\",\"signature\":\"\",\"signDate\":\"\",\"lawSignature\":\"\"}";
 	}
 	
+	public ObjectNode fetchRecruiterDetails() {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode parent = mapper.createObjectNode();
+		
+		ObjectNode chartNode = mapper.createObjectNode();
+		chartNode.put("Joined", 50);
+		chartNode.put("Offer_Progress", 15);
+		chartNode.put("Offer_Acceptance_Pending", 30);
+		chartNode.put("Offer_Declined", 5);
+		parent.set("chart", chartNode);
+		parent.put("total", 100);
+		parent.put("actual", 50);
+		parent.put("percent", "20%");
+		parent.put("active", 2);
+		return parent;
+
+	}
 	
 	
 	@Autowired

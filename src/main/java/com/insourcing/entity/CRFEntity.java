@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "candidate_reg_form")
 public class CRFEntity {
 	@Id
-	private Long id;
+	private String id;
 	@Column
 	private String euStatusManagement;
 	@Column
@@ -20,10 +20,10 @@ public class CRFEntity {
 	private String noneuStatusManagement;
 	@Column
 	private String noneuApplicationForm;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getEuStatusManagement() {

@@ -16,9 +16,9 @@ public interface DealAttachmentRepo extends JpaRepository<DealAttachment, Object
 	//@Query("update")
 	@Modifying
 	@Query("update DealAttachment c set c.dealId = ?2 where c.id = ?1")
-	void update(Long id, Long dealId);
+	void update(Long id, String dealId);
 	
 	@Query("select a from DealAttachment a where a.dealId = ?1")
-	List<DealAttachment> fetchByDealid(long id);
+	List<DealAttachment> fetchByDealid(String id);
 	
 }
