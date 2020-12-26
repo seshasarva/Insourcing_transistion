@@ -379,7 +379,9 @@ public class TransistionService {
 	public ObjectNode fetchRecruiterDetails() {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode parent = mapper.createObjectNode();
-		
+		//List<String> list = new ArrayList<String>();
+		ArrayNode array = mapper.createArrayNode();
+		array.add("clent1");array.add("client2");array.add("All");
 		ObjectNode chartNode = mapper.createObjectNode();
 		chartNode.put("Joined", 50);
 		chartNode.put("Offer_Progress", 15);
@@ -390,6 +392,7 @@ public class TransistionService {
 		parent.put("actual", 50);
 		parent.put("percent", "20%");
 		parent.put("active", 2);
+		parent.set("clients", array);
 		return parent;
 
 	}
