@@ -101,6 +101,11 @@ public class TransistionController {
 		return service.uploadInterviewSchedule(file, id);
 	}
 	
+	@PostMapping("/saveInterviewDetails")
+	public boolean saveInterviewDetails(@RequestBody InterviewScheduleEntity entity) {
+		return service.saveInterviewSchedule(entity);
+	}
+	
 	@GetMapping("/download")
 	public ResponseEntity<InputStreamResource> download(@RequestParam String id,
 			@RequestParam String fieldName) {

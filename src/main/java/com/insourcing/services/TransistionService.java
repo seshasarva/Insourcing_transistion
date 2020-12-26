@@ -269,12 +269,14 @@ public class TransistionService {
 	
 			for(Row row : sheet) {
 				if(row.getRowNum()==0) continue;
+				//start date,end date, empid, name, grade, tr/hr/mr
 				ObjectNode parentNode = objectMapper.createObjectNode();
 				parentNode.put("Emp_no", row.getCell(0).toString());
 				parentNode.put("Start_Date", row.getCell(1).toString());
-				parentNode.put("Name", row.getCell(2).toString());
-				parentNode.put("Grade", row.getCell(3).toString());
-				parentNode.put("Access", row.getCell(4).toString());
+				parentNode.put("End_Date", row.getCell(2).toString());
+				parentNode.put("Name", row.getCell(3).toString());
+				parentNode.put("Grade", row.getCell(4).toString());
+				parentNode.put("TR_MR_HR", row.getCell(5).toString());
 				arrayNode.add(parentNode);
 	
 			}

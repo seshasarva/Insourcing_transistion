@@ -12,12 +12,28 @@ public class Main {
 
 	public static void main(String[] args) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode parent = mapper.createObjectNode();
+		
+		ObjectNode chartNode = mapper.createObjectNode();
+		chartNode.put("Joined", 50);
+		chartNode.put("Offer_Progress", 15);
+		chartNode.put("Offer_Acceptance_Pending", 30);
+		chartNode.put("Offer_Declined", 5);
+		parent.set("chart", chartNode);
+		parent.put("total", 100);
+		parent.put("actual", 50);
+		parent.put("percent", "20%");
+		parent.put("active", 2);
+		System.out.println(parent);
+		double d= (10*100)/50;
+		System.out.println(d);
 		ExploreTcsEntity xplore = new ExploreTcsEntity();
-		xplore.setId(1l);
+		xplore.setId("dealid");
 		System.out.println(mapper.writeValueAsString(xplore));
 		ContactUsEntity obj = new ContactUsEntity();
-		obj.setId(1l);
+		obj.setId("dealid");
 		System.out.println(mapper.writeValueAsString(obj));
+		System.exit(0);
 		CRFEntity entity = new CRFEntity();
 		System.out.println(mapper.writeValueAsString(entity));
 		ObjectNode noneuApplForm = mapper.createObjectNode();
@@ -25,8 +41,6 @@ public class Main {
 		System.out.println(noneuApplForm.toString());
 		System.out.println(mapper.writeValueAsString(noneuApplForm));
 		JourneyEntity je = new JourneyEntity();
-		System.out.println(mapper.writeValueAsString(je));
 
-	}
-
-}
+	}}
+	
