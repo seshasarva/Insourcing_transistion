@@ -20,22 +20,33 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.insourcing.entity.CRFEntity;
+import com.insourcing.entity.CandidateEntity;
+import com.insourcing.entity.CandidateEntityMap;
 import com.insourcing.entity.ContactUsEntity;
+import com.insourcing.entity.DealEntity;
 import com.insourcing.entity.ExploreTcsEntity;
 import com.insourcing.entity.InterviewScheduleEntity;
 import com.insourcing.entity.JourneyEntity;
 import com.insourcing.repository.CRFRepo;
+import com.insourcing.repository.CandidateRepo;
 import com.insourcing.repository.ContactUsRepo;
+import com.insourcing.repository.DealsRepo;
 import com.insourcing.repository.ExploreTcsRepo;
 import com.insourcing.repository.InterviewScheduleRepo;
 import com.insourcing.repository.JourneyRepo;
 
 @Service
 public class TransistionService {
+	
+	@Autowired
+	DealsRepo repo;
+	@Autowired
+	CandidateRepo candidateRepo;
 	
 	public ExploreTcsEntity fetchExploreTcsDetails(String id) {
 		Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(id);
@@ -376,7 +387,7 @@ public class TransistionService {
 		return "{\"title\":\"\",\"firstName\":\"yes\",\"middleName\":\"no\",\"lastName\":\"no\",\"contactNo\":\"yes\",\"emailid\":\"\",\"streetAddress\":\"yes\",\"apartmentUnit\":\"\",\"state\":\"\",\"zipCode\":\"\",\"city\":\"\",\"country\":\"Afganistan\",\"date\":\"\",\"dateAvailable\":\"\",\"currentWorkLocation\":\"\",\"totalExpYrs\":\"\",\"totalExpMts\":\"\",\"totalRelExpYrs\":\"\",\"totalRelExpMts\":\"\",\"exTCSEmployee\":\"\",\"under18ProvideWorkPermit\":\"\",\"offerEmpExtDemWorkUS\":\"\",\"reqSponsorship\":\"\",\"ifYesWhen\":\"\",\"exTCSStartDate\":\"\",\"exTCSEndDate\":\"\",\"companies\":[{\"companyName\":\"\",\"address\":\"\",\"supervisorName\":\"\",\"supervisorContact\":\"\",\"jobTitle\":\"\",\"responsibilities\":\"\",\"startDate\":\"\",\"endDate\":\"\",\"reasonForLeaving\":\"\",\"comMayContactSupervisorRef\":\"Yes\"}],\"courses\":[{\"educationalLevel\":\"\",\"instituteName\":\"\",\"insAddress\":\"\",\"graduate\":\"Yes\",\"degree\":\"\",\"cos\":\"\",\"GPA\":\"\"}],\"skills\":[{\"skillTech\":\"\",\"description\":\"\"}],\"references\":[{\"fullName\":\"\",\"relationship\":\"\",\"comName\":\"\",\"contactNo\":\"\",\"emailId\":\"\",\"address\":\"\"}],\"militaryExp\":\"\",\"signName\":\"\",\"signature\":\"\",\"signDate\":\"\",\"lawSignature\":\"\"}";
 	}
 	
-	public ObjectNode fetchRecruiterDetails() {
+	public ObjectNode fetchRecruiterDetails(String filter, String userName) {
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode parent = mapper.createObjectNode();
 		//List<String> list = new ArrayList<String>();
@@ -395,6 +406,59 @@ public class TransistionService {
 		parent.set("clients", array);
 		return parent;
 
+	}
+	
+	public void populateRecruiterDetails(String filter, String userName) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode jsonFilter = mapper.readTree(filter);
+		ObjectNode parent = mapper.createObjectNode();
+		JsonNode statusFilter = jsonFilter.get("status");
+		JsonNode clientFilter = jsonFilter.get("client");
+
+		String status = "all";
+		String client = "all";
+
+		if(null != statusFilter) {
+			status = statusFilter.asText();
+		}
+		if(null != clientFilter) {
+			client = clientFilter.asText();
+		}
+		List<DealEntity> allDeals = repo.findDealsByLead(userName);
+		ObjectNode chartNode = mapper.createObjectNode();
+		ArrayNode array = mapper.createArrayNode();
+		parent.set("chart", chartNode);
+		parent.set("clients", array);
+		array.add("All");
+		int allAdditions = 0;
+		int joined = 0;
+		int activeCount = 0;
+		for(DealEntity deal : allDeals) {
+			if(!"all".equalsIgnoreCase(status) && !status.equalsIgnoreCase(deal.getDealStatus())) {
+				continue;
+			}
+			if(!"all".equalsIgnoreCase(client) && !client.equalsIgnoreCase(deal.getClientName())) {
+				continue;
+			}
+			array.add(deal.getClientName());
+			if(deal.getDealStatus().equalsIgnoreCase("active")) activeCount++;
+			List<CandidateEntityMap> allCandidates = candidateRepo.findByDealId(deal.getId());
+			allAdditions = allAdditions+allCandidates.size();
+			for(CandidateEntityMap candidateEntity : allCandidates) {
+				if(candidateEntity.getOfferStatus().equalsIgnoreCase("joined")) joined++;
+				JsonNode offerStatus = chartNode.get(candidateEntity.getOfferStatus());
+				if(null == offerStatus) {
+					chartNode.put(candidateEntity.getOfferStatus(), 0);
+				}else {
+					long value = offerStatus.asLong();
+					chartNode.put(candidateEntity.getOfferStatus(), ++value);
+				}
+			}
+		}
+		parent.put("active", activeCount);
+		parent.put("total", allAdditions);
+		parent.put("actual", joined);
+		parent.put("percent", (joined*100)/allAdditions);
 	}
 	
 	

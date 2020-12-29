@@ -43,5 +43,8 @@ public interface CandidateRepo extends JpaRepository<CandidateEntityMap, Object>
 	@Modifying
 	@Query("update CandidateEntityMap c set c.password = ?2 where c.emailid = ?1")
 	public void saveForgotPasswordById(String emailId, String newPassword);
+	
+	@Query("select a from CandidateEntityMap a where a.dealId = ?1")
+	public List<CandidateEntityMap> findByDealId(String dealId);
 
 }

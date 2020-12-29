@@ -110,7 +110,8 @@ public class CandidateEntityMap {
 	
 	@Column(name = "account_locked_out_time")
 	private LocalDateTime accountLockedTime;
-
+	@Column(name = "deal_id")
+	private String dealId;
 	public CandidateEntityMap() {
 		super();
 	}
@@ -549,6 +550,14 @@ public class CandidateEntityMap {
 
 	public void setAccountLockedTime(LocalDateTime accountLockedTime) {
 		this.accountLockedTime = accountLockedTime;
+	}
+
+	public String getDealId() {
+		return dealId;
+	}
+
+	public void setDealId(String dealId) {
+		this.dealId = dealId;
 	}
 
 	@Override

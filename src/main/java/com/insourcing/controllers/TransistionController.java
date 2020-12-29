@@ -2,6 +2,8 @@ package com.insourcing.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
@@ -113,7 +115,10 @@ public class TransistionController {
 	}	
 	
 	@PostMapping("/fetchRecruiterProfile")
-	public ObjectNode fetchRecruiterProfile(String filter) {
-		return service.fetchRecruiterDetails();
+	public ObjectNode fetchRecruiterProfile(String filter,
+			HttpServletRequest request) {
+		String username = (String) request.getAttribute("username");
+
+		return service.fetchRecruiterDetails(filter, username);
 	}	
 }
