@@ -10,7 +10,7 @@ import javax.persistence.Table;
 public class InterviewScheduleEntity {
 	@Id
 	private String id;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String data;
 	public String getId() {
 		return id;

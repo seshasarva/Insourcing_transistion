@@ -3,6 +3,7 @@ package com.insourcing.entity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -133,7 +134,12 @@ public class DealEntity {
 
 	@Transient
 	List<Integer> attachmentIds = new ArrayList<Integer>();
-
+	@Transient
+	Map<String,String> allUsers;
+	@Transient
+	List<String> allGeographies;
+	@Transient
+	String dealLeadEmail;
 
 	public String getId() {
 		return id;
@@ -142,7 +148,33 @@ public class DealEntity {
 	public void setId(String id) {
 		this.id = id;
 	}
+	
+	
 
+	public Map<String, String> getAllUsers() {
+		return allUsers;
+	}
+
+	public void setAllUsers(Map<String, String> allUsers) {
+		this.allUsers = allUsers;
+	}
+
+	public List<String> getAllGeographies() {
+		return allGeographies;
+	}
+
+	public void setAllGeographies(List<String> allGeographies) {
+		this.allGeographies = allGeographies;
+	}
+
+	public String getDealLeadEmail() {
+		return dealLeadEmail;
+	}
+
+	public void setDealLeadEmail(String dealLeadEmail) {
+		this.dealLeadEmail = dealLeadEmail;
+	}
+	
 	public String getMonthOfCreation() {
 		return monthOfCreation;
 	}

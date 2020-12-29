@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import javax.transaction.Transactional;
@@ -91,9 +93,10 @@ public class DealsService {
 		System.out.println("username is: " + username);
 		Random random =  new Random();
 		int randomId = random.nextInt(10000); 
+		if(null == deal.getId())
 		deal.setId("DL"+randomId);
-		deal.setDealLead(username);
-		deal.setHrTransitionManager(username);
+		//deal.setDealLead(username);
+		//deal.setHrTransitionManager(username);
 		Calendar canlendar = Calendar.getInstance();
 		if (null == deal.getId()) {
 			deal.setCreatedTime(canlendar.getTime());
@@ -115,6 +118,28 @@ public class DealsService {
 
 	public List<DealEntity> fetchAll() {
 		return repo.findAll();
+	}	
+	
+	public DealEntity loadDetails(String emailId) {
+		DealEntity deal = new DealEntity();
+		String username = getUserName(emailId);
+		if(null!=username){
+			deal.setDealLead(username);
+			deal.setDealLeadEmail(emailId);
+		}else{
+			deal.setAllUsers(getAllUsers());
+		}
+		List<String> geographies = Arrays.asList(countries.split(","));
+		deal.setAllGeographies(geographies);		
+		return deal;
+	}
+	
+	private Map<String, String> getAllUsers() {
+		Map<String, String> allUsers=new HashMap<>();
+		List<HRLoginEntity> all = hrRepository.findAll();
+		all.forEach(user->{allUsers.put(user.getEmailId(), user.getEmpName());});
+		System.out.println("allUsers-----"+allUsers.size());
+		return allUsers;
 	}
 
 //	public ResponseEntity<InputStreamResource> download() {

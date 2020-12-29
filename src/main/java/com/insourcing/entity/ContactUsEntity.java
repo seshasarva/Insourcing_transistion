@@ -24,6 +24,14 @@ public class ContactUsEntity {
 	private String emailId;
 	@Column
 	private byte[] img;
+	@Column
+	private String display;
+	public String getDisplay() {
+		return display;
+	}
+	public void setDisplay(String display) {
+		this.display = display;
+	}
 	public String getId() {
 		return id;
 	}

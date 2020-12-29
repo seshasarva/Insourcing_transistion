@@ -12,13 +12,13 @@ import javax.persistence.Table;
 public class CRFEntity {
 	@Id
 	private String id;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String euStatusManagement;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String euApplicationForm;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String noneuStatusManagement;
-	@Column
+	@Column(columnDefinition="TEXT")
 	private String noneuApplicationForm;
 	public String getId() {
 		return id;

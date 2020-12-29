@@ -25,9 +25,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.insourcing.entity.CRFEntity;
-import com.insourcing.entity.CandidateEntity;
 import com.insourcing.entity.CandidateEntityMap;
 import com.insourcing.entity.ContactUsEntity;
+import com.insourcing.entity.ContactUsId;
 import com.insourcing.entity.DealEntity;
 import com.insourcing.entity.ExploreTcsEntity;
 import com.insourcing.entity.InterviewScheduleEntity;
@@ -119,7 +119,7 @@ public class TransistionService {
 		List<ContactUsEntity> deals = contactUsRepo.findAll();
 		List<ContactUsEntity> filtered = new ArrayList<ContactUsEntity>();
 		for(ContactUsEntity deal : deals) {
-			if(deal.getId()== id)
+			if(deal.getId().equalsIgnoreCase(id))
 			filtered.add(deal);
 		}
 		return filtered;
@@ -138,8 +138,8 @@ public class TransistionService {
 		return false;
 	}
 	@Transactional
-	public boolean saveContactUsImage(MultipartFile file, String id, String tileName) {
-		try {	
+	public ContactUsEntity saveContactUsImage(MultipartFile file, String id, String tileName) {
+		/*try {	
 			boolean found = false;
 			List<ContactUsEntity> alldeals = contactUsRepo.findAll();
 			for(ContactUsEntity each : alldeals) {
@@ -163,7 +163,41 @@ public class TransistionService {
 			e.printStackTrace();
 			return false;
 		}
-		return true;
+		return true;*/
+		
+		ContactUsEntity contactUs=null;
+		try {	
+			boolean found = false;
+			List<ContactUsEntity> alldeals = contactUsRepo.findAll();
+			for(ContactUsEntity each : alldeals) {
+					if(each.getId() == id 
+							&& each.getTileName().equalsIgnoreCase(tileName) ) {
+				ContactUsEntity dealEntity = each;
+				dealEntity.setImg(file.getBytes());
+				contactUsRepo.save(dealEntity);
+				found  = true;
+				}
+			}
+			if(!found){
+				ContactUsEntity entity = new ContactUsEntity();
+				entity.setId(id);
+				entity.setTileName(tileName);
+				entity.setImg(file.getBytes());
+				contactUsRepo.save(entity);
+
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			return contactUs;
+		}
+		
+		ContactUsId contactUsId = new ContactUsId(id, tileName);
+		Optional<ContactUsEntity> entity = contactUsRepo.findById(contactUsId);
+		if(null != entity && null != entity.get()) {
+			contactUs = entity.get();
+		}
+		return contactUs;		
+		
 	}
 	
 	public JourneyEntity fetchMyJourneyDetails(String id) {
@@ -182,17 +216,35 @@ public class TransistionService {
 	}
 	
 	public boolean saveJourneyDetails(JourneyEntity entity) {
-		journeyRepo.save(entity);
+		Optional<JourneyEntity> journeyEntityOpt = journeyRepo.findById(entity.getId());
+		JourneyEntity journeyEntity;
+		if(null != journeyEntityOpt && journeyEntityOpt.isPresent()) {
+			journeyEntity = journeyEntityOpt.get();
+		}else {
+			journeyEntity = new JourneyEntity();
+		}
+		journeyEntity.setBlogEvaluation(entity.getBlogEvaluation());
+		journeyEntity.setBlogInduction(entity.getBlogInduction());
+		journeyEntity.setBlogOffer(entity.getBlogOffer());
+		journeyEntity.setBlogRegistration(entity.getBlogRegistration());
+		journeyEntity.setNewContent(entity.getNewContent());
+		journeyRepo.save(journeyEntity);
 		return true;
 	}
 	@Transactional
 	public boolean uploadJourneyAttachments(MultipartFile file, String id, String fieldName) {
 		try {
 			Optional<JourneyEntity> entity = journeyRepo.findById(id);
+			JourneyEntity journeyEntity;
 			if(null != entity && entity.isPresent()) {
-				JourneyEntity journeyEntity = entity.get();
-				switch(fieldName) {
+				journeyEntity = entity.get();
+			}else {
+				journeyEntity = new JourneyEntity();
+				journeyEntity.setId(id);
+			}
+			switch(fieldName) {
 				case "checklist":
+				System.out.println("saving bytes");
 					journeyEntity.setChecklist(file.getBytes());
 					journeyEntity.setChecklistFile(file.getOriginalFilename());
 					break;
@@ -219,7 +271,7 @@ public class TransistionService {
 	
 				}
 				journeyRepo.save(journeyEntity);
-			}
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 			return false;
@@ -282,7 +334,7 @@ public class TransistionService {
 				if(row.getRowNum()==0) continue;
 				//start date,end date, empid, name, grade, tr/hr/mr
 				ObjectNode parentNode = objectMapper.createObjectNode();
-				parentNode.put("Emp_no", row.getCell(0).toString());
+				parentNode.put("Employee_Id", row.getCell(0).toString());
 				parentNode.put("Start_Date", row.getCell(1).toString());
 				parentNode.put("End_Date", row.getCell(2).toString());
 				parentNode.put("Name", row.getCell(3).toString());
@@ -294,6 +346,7 @@ public class TransistionService {
 			InterviewScheduleEntity entity = new InterviewScheduleEntity();
 			entity.setId(id);
 			entity.setData(arrayNode.toString());
+			System.out.println("the node is---"+arrayNode.toString());
 			interviewScheduleRepo.save(entity);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -366,7 +419,7 @@ public class TransistionService {
 	}
 	
 	public String updatePref(ObjectNode json) {
-		ObjectMapper objectMapper = new ObjectMapper();
+		/*ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode node = objectMapper.createObjectNode();
 		node.put("display", false);
 		node.put("type", "text");
@@ -380,11 +433,12 @@ public class TransistionService {
 		json.set("loc", node);
 		json.set("pwd", node);
 		json.set("confpwd", node);
-		return json.toString();
+		return json.toString();*/		
+		return "{\"emailid\":\"\",\"contactno\":\"\",\"title\":\"\",\"currentTitle\":\"\",\"firstname\":\"\",\"middlename\":\"\",\"lastname\":\"\",\"skills\":\"\",\"dateOfBirth\":\"\",\"currentLocation\":\"\",\"password\":\"\",\"confirmPassword\":\"\",\"newFields\":[{\"name\":\"Test\",\"type\":\"text\",\"display\":\"\"}]}";
 	}
 	
 	public String updateApplForm() {
-		return "{\"title\":\"\",\"firstName\":\"yes\",\"middleName\":\"no\",\"lastName\":\"no\",\"contactNo\":\"yes\",\"emailid\":\"\",\"streetAddress\":\"yes\",\"apartmentUnit\":\"\",\"state\":\"\",\"zipCode\":\"\",\"city\":\"\",\"country\":\"Afganistan\",\"date\":\"\",\"dateAvailable\":\"\",\"currentWorkLocation\":\"\",\"totalExpYrs\":\"\",\"totalExpMts\":\"\",\"totalRelExpYrs\":\"\",\"totalRelExpMts\":\"\",\"exTCSEmployee\":\"\",\"under18ProvideWorkPermit\":\"\",\"offerEmpExtDemWorkUS\":\"\",\"reqSponsorship\":\"\",\"ifYesWhen\":\"\",\"exTCSStartDate\":\"\",\"exTCSEndDate\":\"\",\"companies\":[{\"companyName\":\"\",\"address\":\"\",\"supervisorName\":\"\",\"supervisorContact\":\"\",\"jobTitle\":\"\",\"responsibilities\":\"\",\"startDate\":\"\",\"endDate\":\"\",\"reasonForLeaving\":\"\",\"comMayContactSupervisorRef\":\"Yes\"}],\"courses\":[{\"educationalLevel\":\"\",\"instituteName\":\"\",\"insAddress\":\"\",\"graduate\":\"Yes\",\"degree\":\"\",\"cos\":\"\",\"GPA\":\"\"}],\"skills\":[{\"skillTech\":\"\",\"description\":\"\"}],\"references\":[{\"fullName\":\"\",\"relationship\":\"\",\"comName\":\"\",\"contactNo\":\"\",\"emailId\":\"\",\"address\":\"\"}],\"militaryExp\":\"\",\"signName\":\"\",\"signature\":\"\",\"signDate\":\"\",\"lawSignature\":\"\"}";
+		return "{\"title\":\"\",\"firstName\":\"\",\"middleName\":\"\",\"lastName\":\"\",\"contactNo\":\"\",\"emailid\":\"\",\"streetAddress\":\"\",\"apartmentUnit\":\"\",\"state\":\"\",\"zipCode\":\"\",\"city\":\"\",\"country\":\"Afganistan\",\"date\":\"\",\"dateAvailable\":\"\",\"currentWorkLocation\":\"\",\"totalExpYrs\":\"\",\"totalExpMts\":\"\",\"totalRelExpYrs\":\"\",\"totalRelExpMts\":\"\",\"exTCSEmployee\":\"\",\"under18ProvideWorkPermit\":\"\",\"offerEmpExtDemWorkUS\":\"\",\"reqSponsorship\":\"\",\"ifYesWhen\":\"\",\"exTCSStartDate\":\"\",\"exTCSEndDate\":\"\",\"companies\":[{\"companyName\":\"\",\"address\":\"\",\"supervisorName\":\"\",\"supervisorContact\":\"\",\"jobTitle\":\"\",\"responsibilities\":\"\",\"startDate\":\"\",\"endDate\":\"\",\"reasonForLeaving\":\"\",\"comMayContactSupervisorRef\":\"\"}],\"courses\":[{\"educationalLevel\":\"\",\"instituteName\":\"\",\"insAddress\":\"\",\"graduate\":\"\",\"degree\":\"\",\"cos\":\"\",\"GPA\":\"\"}],\"skills\":[{\"skillTech\":\"\",\"description\":\"\"}],\"references\":[{\"fullName\":\"\",\"relationship\":\"\",\"comName\":\"\",\"contactNo\":\"\",\"emailId\":\"\",\"address\":\"\"}],\"militaryExp\":\"\",\"signName\":\"\",\"signature\":\"\",\"signDate\":\"\",\"lawSignature\":\"\"}";
 	}
 	
 	public ObjectNode fetchRecruiterDetails(String filter, String userName) {
@@ -460,7 +514,6 @@ public class TransistionService {
 		parent.put("actual", joined);
 		parent.put("percent", (joined*100)/allAdditions);
 	}
-	
 	
 	@Autowired
 	ContactUsRepo contactUsRepo;

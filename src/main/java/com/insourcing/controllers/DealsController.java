@@ -43,6 +43,13 @@ public class DealsController {
 		}
 		return result;
 	}
+	
+	@GetMapping("/loadDetails")
+	public DealEntity loadDetails(HttpServletRequest request) {
+		System.out.println("in loadDetails----");
+		String username = (String) request.getAttribute("username");
+		return service.loadDetails(username);
+	}
 
 	@GetMapping("/onLoadFields")
 	public DealEntity onLoadFields(HttpServletRequest request) {

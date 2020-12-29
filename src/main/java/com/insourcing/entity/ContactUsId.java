@@ -3,7 +3,7 @@ package com.insourcing.entity;
 import java.io.Serializable;
 
 public class ContactUsId implements Serializable{
-	private long id;
+	private String id;
 
     private String tileName;
     
@@ -11,16 +11,16 @@ public class ContactUsId implements Serializable{
     	
     }
 
-    public ContactUsId(long id, String tileName) {
+    public ContactUsId(String id, String tileName) {
         this.id = id;
         this.tileName = tileName;
     }
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

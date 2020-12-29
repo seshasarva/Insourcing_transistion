@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Table(name = "my_journey_table")
 public class JourneyEntity {
 	@Id
-	private Long id;
+	private String id;
 	@Column
 	private String blogRegistration;
 	@Column
@@ -44,10 +44,10 @@ public class JourneyEntity {
 	private String thirdPartUrlsFile;
 	@Column
 	private byte[] thirdPartUrls;
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public String getBlogRegistration() {
