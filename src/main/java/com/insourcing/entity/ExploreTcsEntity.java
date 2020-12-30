@@ -3,14 +3,17 @@ package com.insourcing.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "explore_tcs_table")
+@IdClass(ExploreTcsId.class)
 public class ExploreTcsEntity {
 	@Id
 	private String id;
-
+	@Id
+	private int index;
 	@Column(name = "cover_image")
 	private byte[] coverImage;
 	@Column(name = "cover_image_file")
@@ -25,6 +28,8 @@ public class ExploreTcsEntity {
 	private String videoFile;
 	@Column(name = "content")
 	private String content;
+	@Column(name = "header")
+	private String header;
 	@Column(name = "benifits")
 	private String benifits;
 	public String getId() {
@@ -80,6 +85,18 @@ public class ExploreTcsEntity {
 	}
 	public void setBenifits(String benifits) {
 		this.benifits = benifits;
+	}
+	public int getIndex() {
+		return index;
+	}
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	public String getHeader() {
+		return header;
+	}
+	public void setHeader(String header) {
+		this.header = header;
 	}
 	
 }

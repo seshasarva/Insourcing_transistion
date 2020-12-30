@@ -3,6 +3,8 @@ package com.insourcing;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -22,13 +24,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.insourcing.entity.CRFEntity;
+import com.insourcing.entity.RecruiterProfileEntity;
 import com.insourcing.model.HRFormRequest;
 import com.insourcing.repository.HRLoginRepo;
 import com.insourcing.services.HRService;
@@ -87,6 +85,28 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 		return args -> {
 			HRFormRequest request = new HRFormRequest("1", "test", "test@tcs.com", "test", "INDIA");
 			hrService.register(request );
+			try {
+			Path path = Paths.get("C:/component.png");
+		    byte[] data = Files.readAllBytes(path);
+		    List<RecruiterProfileEntity> list = new ArrayList<RecruiterProfileEntity>();
+		    RecruiterProfileEntity one = new RecruiterProfileEntity();
+		    one.setId(0);
+		    one.setName("someanem");
+		    one.setMail("somemailo");
+		    one.setImg(data);
+		    one.setFileName("component.png");
+		    one.setCountry("INDIA");
+		    one.setContactNo("9999999");list.add(one);
+		    one.setId(1);list.add(one);
+		    one.setId(2);list.add(one);
+		    one.setId(3);list.add(one);
+		    one.setId(4);list.add(one);
+		    transistionService.saveRecruiterProfile(list);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+
+
 			/*
 			ObjectNode parent = objectMapper.createObjectNode();
 			ObjectNode euStatusMangement = objectMapper.createObjectNode();

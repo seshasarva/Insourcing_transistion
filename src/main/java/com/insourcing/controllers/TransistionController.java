@@ -2,8 +2,6 @@ package com.insourcing.controllers;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +22,7 @@ import com.insourcing.entity.ContactUsEntity;
 import com.insourcing.entity.ExploreTcsEntity;
 import com.insourcing.entity.InterviewScheduleEntity;
 import com.insourcing.entity.JourneyEntity;
+import com.insourcing.entity.RecruiterProfileEntity;
 import com.insourcing.services.TransistionService;
 
 @RestController
@@ -33,20 +32,22 @@ public class TransistionController {
 	TransistionService service;
 	
 	@GetMapping("/fetchExploreTcsDetails")
-	public ExploreTcsEntity fetchExploreTcsDetails(@RequestParam String id) {
+	public List<ExploreTcsEntity> fetchExploreTcsDetails(@RequestParam String id) {
 		return service.fetchExploreTcsDetails(id);
 	}
 	
 	@PostMapping("/saveExploreTcs")
-	public boolean saveExploreTcs(@RequestBody ExploreTcsEntity entity) {
+	public boolean saveExploreTcs(@RequestBody List<ExploreTcsEntity> entity) {
 		return service.saveExploreTcs(entity);
 	}
 	
 	@PostMapping("/uploadExploreTcsAttachments")
 	public boolean uploadExploreTcsAttachments(@RequestPart("file") MultipartFile file,
-			@RequestParam String id, @RequestParam String field) {
+			@RequestParam String id, 
+			@RequestParam int index,
+			@RequestParam String field) {
 		
-		return service.uploadExploreTcsFile(file, id, field);
+		return service.uploadExploreTcsFile(file, id, index, field);
 	}
 	
 	@GetMapping("/fetchContactUsDetails")
@@ -115,10 +116,26 @@ public class TransistionController {
 	}	
 	
 	@PostMapping("/fetchRecruiterProfile")
-	public ObjectNode fetchRecruiterProfile(String filter,
-			HttpServletRequest request) {
-		String username = (String) request.getAttribute("username");
+	public ObjectNode fetchRecruiterProfile(@RequestBody String filter,
+			@RequestParam String username) {
+		//String username = (String) request.getAttribute("username");
 
 		return service.fetchRecruiterDetails(filter, username);
 	}	
+	
+	@GetMapping("/fetchRecruiterProfile")
+	public  List<RecruiterProfileEntity> fetchRecruiterProfile() {
+		return service.fetchRecruiterProfile();
+	}	
+	
+	@PostMapping("/saveRecruiterProfile")
+	public boolean saveRecruiterProfile(@RequestBody List<RecruiterProfileEntity> entity) {
+		return service.saveRecruiterProfile(entity);
+	}
+	
+	@PostMapping("/uploadRecruiterProfileImg")
+	public boolean uploadRecruiterProfileImg(@RequestPart("file") MultipartFile file,
+			@RequestParam int id) {
+		return service.uploadRecruiterProfileImage(id, file);
+	}
 }

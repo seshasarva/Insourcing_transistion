@@ -61,6 +61,11 @@ public class DealsController {
 	public List<DealEntity> fetchAllDeals() {
 		return service.fetchAll();
 	}
+	
+	@GetMapping("/fetchByDealLead")
+	public List<DealEntity> fetchByDealLead(@RequestParam String lead) {
+		return service.fetchAll();
+	}
 
 	@GetMapping("/fetchDeal")
 	public DealEntity fetchDeal(@RequestParam String id) {

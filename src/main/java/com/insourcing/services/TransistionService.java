@@ -30,8 +30,10 @@ import com.insourcing.entity.ContactUsEntity;
 import com.insourcing.entity.ContactUsId;
 import com.insourcing.entity.DealEntity;
 import com.insourcing.entity.ExploreTcsEntity;
+import com.insourcing.entity.ExploreTcsId;
 import com.insourcing.entity.InterviewScheduleEntity;
 import com.insourcing.entity.JourneyEntity;
+import com.insourcing.entity.RecruiterProfileEntity;
 import com.insourcing.repository.CRFRepo;
 import com.insourcing.repository.CandidateRepo;
 import com.insourcing.repository.ContactUsRepo;
@@ -39,6 +41,7 @@ import com.insourcing.repository.DealsRepo;
 import com.insourcing.repository.ExploreTcsRepo;
 import com.insourcing.repository.InterviewScheduleRepo;
 import com.insourcing.repository.JourneyRepo;
+import com.insourcing.repository.RecruiterProfileRepo;
 
 @Service
 public class TransistionService {
@@ -47,34 +50,44 @@ public class TransistionService {
 	DealsRepo repo;
 	@Autowired
 	CandidateRepo candidateRepo;
+	@Autowired
+	RecruiterProfileRepo recruiterProfileRepo;
 	
-	public ExploreTcsEntity fetchExploreTcsDetails(String id) {
-		Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(id);
+	public List<ExploreTcsEntity> fetchExploreTcsDetails(String id) {
+		List<ExploreTcsId> ids = new ArrayList<ExploreTcsId>();
+		List<ExploreTcsEntity> deals = new ArrayList<ExploreTcsEntity>();
 		try {
-			if(null != deal && deal.isPresent()) {
-				return deal.get();
+			for(int i = 0; i<5;i++) {
+				ExploreTcsId exploreTcsId = new ExploreTcsId(id, i);
+				ids.add(exploreTcsId);
 			}
+			deals = exploreTcsRepo.findAllById(ids);			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		return null;
+		return deals;
 	}
 	
-	public boolean saveExploreTcs(ExploreTcsEntity exploreTcsEntity) {
-		try {
-			ExploreTcsEntity entity;
-			Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(exploreTcsEntity.getId());
-			if(null != deal && deal.isPresent()) {
-				entity = deal.get();
-				
-				
-			}else {
-				entity = new ExploreTcsEntity();
-				entity.setId(exploreTcsEntity.getId());
+	public boolean saveExploreTcs(List<ExploreTcsEntity> exploreTcsEntities) {
+		try {			
+			for(ExploreTcsEntity exploreTcsEntity : exploreTcsEntities) {
+				ExploreTcsId eachId = new ExploreTcsId(exploreTcsEntity.getId(), exploreTcsEntity.getIndex());
+				Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(eachId);
+				ExploreTcsEntity entity = null;
+				if(null != deal && deal.isPresent()) {
+					entity = deal.get();				
+				}else {
+					entity = new ExploreTcsEntity();
+					entity.setId(exploreTcsEntity.getId());
+					entity.setIndex(exploreTcsEntity.getIndex());
+				}
+				entity.setBenifits(exploreTcsEntity.getBenifits());
+				entity.setContent(exploreTcsEntity.getContent());
+				exploreTcsRepo.save(exploreTcsEntity);
 			}
-			entity.setBenifits(exploreTcsEntity.getBenifits());
-			entity.setContent(exploreTcsEntity.getContent());
-			exploreTcsRepo.save(exploreTcsEntity);
+			/*for(ExploreTcsEntity entity : allDeals) {
+				
+			}*/
 			return true;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -83,15 +96,17 @@ public class TransistionService {
 	}
 	
 	@Transactional
-	public boolean uploadExploreTcsFile(MultipartFile file, String id, String field) {
+	public boolean uploadExploreTcsFile(MultipartFile file, String id, int index,String field) {
 		try {
 		ExploreTcsEntity entity;
-		Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(id);
+		ExploreTcsId exploreTcsId = new ExploreTcsId(id, index);
+		Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(exploreTcsId);
 		if(null != deal && deal.isPresent()) {
 			entity = deal.get();
 		}else {
 			entity = new ExploreTcsEntity();
 			entity.setId(id);
+			entity.setIndex(index);
 		}
 			switch(field) {
 				case "coverimage":
@@ -439,6 +454,50 @@ public class TransistionService {
 	
 	public String updateApplForm() {
 		return "{\"title\":\"\",\"firstName\":\"\",\"middleName\":\"\",\"lastName\":\"\",\"contactNo\":\"\",\"emailid\":\"\",\"streetAddress\":\"\",\"apartmentUnit\":\"\",\"state\":\"\",\"zipCode\":\"\",\"city\":\"\",\"country\":\"Afganistan\",\"date\":\"\",\"dateAvailable\":\"\",\"currentWorkLocation\":\"\",\"totalExpYrs\":\"\",\"totalExpMts\":\"\",\"totalRelExpYrs\":\"\",\"totalRelExpMts\":\"\",\"exTCSEmployee\":\"\",\"under18ProvideWorkPermit\":\"\",\"offerEmpExtDemWorkUS\":\"\",\"reqSponsorship\":\"\",\"ifYesWhen\":\"\",\"exTCSStartDate\":\"\",\"exTCSEndDate\":\"\",\"companies\":[{\"companyName\":\"\",\"address\":\"\",\"supervisorName\":\"\",\"supervisorContact\":\"\",\"jobTitle\":\"\",\"responsibilities\":\"\",\"startDate\":\"\",\"endDate\":\"\",\"reasonForLeaving\":\"\",\"comMayContactSupervisorRef\":\"\"}],\"courses\":[{\"educationalLevel\":\"\",\"instituteName\":\"\",\"insAddress\":\"\",\"graduate\":\"\",\"degree\":\"\",\"cos\":\"\",\"GPA\":\"\"}],\"skills\":[{\"skillTech\":\"\",\"description\":\"\"}],\"references\":[{\"fullName\":\"\",\"relationship\":\"\",\"comName\":\"\",\"contactNo\":\"\",\"emailId\":\"\",\"address\":\"\"}],\"militaryExp\":\"\",\"signName\":\"\",\"signature\":\"\",\"signDate\":\"\",\"lawSignature\":\"\"}";
+	}
+	
+	public List<RecruiterProfileEntity> fetchRecruiterProfile() {
+		return recruiterProfileRepo.findAll();
+	}
+	
+	public boolean saveRecruiterProfile(List<RecruiterProfileEntity> requestEntities) {
+		for(RecruiterProfileEntity requestEntity : requestEntities) {
+			Optional<RecruiterProfileEntity> entity = recruiterProfileRepo.findById(requestEntity.getId());
+			RecruiterProfileEntity recruiterProfileEntity;
+			if(null !=entity && entity.isPresent()) {
+				recruiterProfileEntity = entity.get();
+			}else {
+				recruiterProfileEntity = new RecruiterProfileEntity();
+				recruiterProfileEntity.setId(requestEntity.getId());
+			}
+			requestEntity.setContactNo(requestEntity.getContactNo());
+			requestEntity.setCountry(requestEntity.getCountry());
+			requestEntity.setMail(requestEntity.getMail());
+			requestEntity.setName(requestEntity.getName());
+			recruiterProfileRepo.save(requestEntity);
+		}
+		return true;
+	}
+	
+	public boolean uploadRecruiterProfileImage(int index, MultipartFile file) {
+		Optional<RecruiterProfileEntity> entity = recruiterProfileRepo.findById(index);
+		RecruiterProfileEntity recruiterProfileEntity;
+		try {
+			if(null !=entity && entity.isPresent()) {
+				recruiterProfileEntity = entity.get();
+			}else {
+				recruiterProfileEntity = new RecruiterProfileEntity();
+				recruiterProfileEntity.setId(index);
+			}
+			recruiterProfileEntity.setFileName(file.getOriginalFilename());
+			recruiterProfileEntity.setImg(file.getBytes());
+			recruiterProfileRepo.save(recruiterProfileEntity);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+		
 	}
 	
 	public ObjectNode fetchRecruiterDetails(String filter, String userName) {
