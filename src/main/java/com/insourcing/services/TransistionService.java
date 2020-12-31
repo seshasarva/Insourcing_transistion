@@ -69,21 +69,21 @@ public class TransistionService {
 	}
 	
 	public boolean saveExploreTcs(List<ExploreTcsEntity> exploreTcsEntities) {
-		try {			
+		try {
 			for(ExploreTcsEntity exploreTcsEntity : exploreTcsEntities) {
 				ExploreTcsId eachId = new ExploreTcsId(exploreTcsEntity.getId(), exploreTcsEntity.getIndex());
 				Optional<ExploreTcsEntity> deal = exploreTcsRepo.findById(eachId);
 				ExploreTcsEntity entity = null;
-				if(null != deal && deal.isPresent()) {
-					entity = deal.get();				
-				}else {
-					entity = new ExploreTcsEntity();
-					entity.setId(exploreTcsEntity.getId());
+			if(null != deal && deal.isPresent()) {
+				entity = deal.get();
+			}else {
+				entity = new ExploreTcsEntity();
+				entity.setId(exploreTcsEntity.getId());
 					entity.setIndex(exploreTcsEntity.getIndex());
-				}
-				entity.setBenifits(exploreTcsEntity.getBenifits());
-				entity.setContent(exploreTcsEntity.getContent());
-				exploreTcsRepo.save(exploreTcsEntity);
+			}
+			entity.setBenifits(exploreTcsEntity.getBenifits());
+			entity.setContent(exploreTcsEntity.getContent());
+			exploreTcsRepo.save(exploreTcsEntity);
 			}
 			/*for(ExploreTcsEntity entity : allDeals) {
 				
@@ -142,8 +142,26 @@ public class TransistionService {
 	
 	public boolean saveContactUsEntity(List<ContactUsEntity> entities) {
 		try {
-			for(ContactUsEntity entity : entities) {
-				contactUsRepo.save(entity);	
+			ObjectMapper objectMapper = new ObjectMapper();
+			for(ContactUsEntity contact : entities) {
+				ContactUsEntity entity;
+			ContactUsId contactUsId = new ContactUsId(contact.getId(), contact.getTileName());
+			Optional<ContactUsEntity> contactUs = contactUsRepo.findById(contactUsId);
+			if(null != contactUs && contactUs.isPresent()) {
+				entity = contactUs.get();				
+				
+			}else {
+				entity = new ContactUsEntity();
+				entity.setId(contact.getId());
+				entity.setTileName(contact.getTileName());
+			}			
+			entity.setHeader(contact.getHeader());
+			entity.setName(contact.getName());
+			entity.setPhone(contact.getPhone());
+			entity.setEmailId(contact.getEmailId());
+			entity.setDisplay(contact.getDisplay());
+			System.out.println("saving contact us----"+objectMapper.writeValueAsString(entity));
+			contactUsRepo.save(entity);	
 				
 			}
 			return true;
@@ -154,31 +172,6 @@ public class TransistionService {
 	}
 	@Transactional
 	public ContactUsEntity saveContactUsImage(MultipartFile file, String id, String tileName) {
-		/*try {	
-			boolean found = false;
-			List<ContactUsEntity> alldeals = contactUsRepo.findAll();
-			for(ContactUsEntity each : alldeals) {
-					if(each.getId() == id 
-							&& each.getTileName().equalsIgnoreCase(tileName) ) {
-				ContactUsEntity dealEntity = each;
-				dealEntity.setImg(file.getBytes());
-				contactUsRepo.save(dealEntity);
-				found  = true;
-				}
-			}
-			if(!found){
-				ContactUsEntity entity = new ContactUsEntity();
-				entity.setId(id);
-				entity.setTileName(tileName);
-				entity.setImg(file.getBytes());
-				contactUsRepo.save(entity);
-
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;*/
 		
 		ContactUsEntity contactUs=null;
 		try {	
@@ -246,6 +239,7 @@ public class TransistionService {
 		journeyRepo.save(journeyEntity);
 		return true;
 	}
+		
 	@Transactional
 	public boolean uploadJourneyAttachments(MultipartFile file, String id, String fieldName) {
 		try {
@@ -304,10 +298,10 @@ public class TransistionService {
 			entity.setId(id);
 		}
 		switch (field) {
-		case "euStatusMangement": entity.setEuStatusManagement(json);break;
-		case "noneuStatusMaangement":entity.setNoneuApplicationForm(json);break;
-		case "euApplForm":entity.setEuApplicationForm(json);break;
-		case "noneuApplForm":entity.setNoneuApplicationForm(json);break;
+		case "euStatusManagement": entity.setEuStatusManagement(json);break;
+		case "noneuStatusManagement":entity.setNoneuStatusManagement(json);break;
+		case "euApplicationForm":entity.setEuApplicationForm(json);break;
+		case "noneuApplicationForm":entity.setNoneuApplicationForm(json);break;
 		}
 		crfRepo.save(entity);
 		return true;
@@ -407,6 +401,7 @@ public class TransistionService {
 			}
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 			file = new InputStreamResource(inputStream);
+			System.out.println("downloading file----"+filename);
 			}
 		} catch (Exception e) {
 			System.out.println("Exception in download :" + e);
@@ -448,8 +443,9 @@ public class TransistionService {
 		json.set("loc", node);
 		json.set("pwd", node);
 		json.set("confpwd", node);
-		return json.toString();*/		
-		return "{\"emailid\":\"\",\"contactno\":\"\",\"title\":\"\",\"currentTitle\":\"\",\"firstname\":\"\",\"middlename\":\"\",\"lastname\":\"\",\"skills\":\"\",\"dateOfBirth\":\"\",\"currentLocation\":\"\",\"password\":\"\",\"confirmPassword\":\"\",\"newFields\":[{\"name\":\"Test\",\"type\":\"text\",\"display\":\"\"}]}";
+		return json.toString();		
+		return "{\"emailid\":\"\",\"contactno\":\"\",\"title\":\"\",\"currentTitle\":\"\",\"firstname\":\"\",\"middlename\":\"\",\"lastname\":\"\",\"skills\":\"\",\"dateOfBirth\":\"\",\"currentLocation\":\"\",\"password\":\"\",\"confirmPassword\":\"\",\"newFields\":[{\"name\":\"Test\",\"type\":\"text\",\"display\":\"\"}]}";*/
+		return "{\"emailid\":\"\",\"contactno\":\"\",\"title\":\"\",\"currentTitle\":\"\",\"firstname\":\"\",\"middlename\":\"\",\"lastname\":\"\",\"skills\":\"\",\"dateOfBirth\":\"\",\"currentLocation\":\"\",\"password\":\"\",\"confirmPassword\":\"\",\"newFields\":[]}";
 	}
 	
 	public String updateApplForm() {
