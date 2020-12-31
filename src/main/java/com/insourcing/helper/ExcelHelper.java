@@ -1,15 +1,17 @@
 package com.insourcing.helper;
 
-import java.util.*;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -104,7 +106,7 @@ public class ExcelHelper {
 			if (totalRowCount < 2000) {
 				while (rows.hasNext()) {
 					Row currentRow = rows.next();
-					if (rowNumber == 0) { // skip header
+					if (rowNumber == 0 || rowNumber == 1) { // skip header
 						rowNumber++;
 						continue;
 					}
@@ -124,7 +126,7 @@ public class ExcelHelper {
 					candidateEntity.setCountry(
 							currentRow.getCell(6, MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue());
 					if (!candidateEntity.getCountry().isEmpty()) {
-						candidateEntity.setPassword(alphaNumericKey());
+						candidateEntity.setPassword(genDefaultPwd());
 					}
 					candidateEntity.setDate(DateHelper.setCurrentDate("dd/MM/yyyy HH:mm:ss", "Asia/Kolkata"));
 					excelUploadsEntity.add(candidateEntity);
@@ -140,16 +142,37 @@ public class ExcelHelper {
 			throw new RuntimeException("fail to parse Excel file: " + e.getMessage());
 		}
 	}
+	
+	public static String genDefaultPwd() {
+		  int length=8;
+	      String capitalCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	      String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+	      String specialCharacters = "!@#$?";
+	      String numbers = "1234567890";
+	      String combinedChars = capitalCaseLetters + lowerCaseLetters + specialCharacters + numbers;
+	      Random random = new Random();
+	      char[] password = new char[length];
+	      String pwd;
 
-	public static String alphaNumericKey() throws NoSuchAlgorithmException {
-		int leftLimit = 48; // numeral '0'
-		int rightLimit = 122; // letter 'z'
-		int targetStringLength = 8;
-		return SecureRandom.getInstanceStrong().ints(leftLimit, rightLimit + 1)
-				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)).limit(targetStringLength)
-				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
-	}
-
+	      password[0] = lowerCaseLetters.charAt(random.nextInt(lowerCaseLetters.length()));
+	      password[1] = capitalCaseLetters.charAt(random.nextInt(capitalCaseLetters.length()));
+	      password[2] = specialCharacters.charAt(random.nextInt(specialCharacters.length()));
+	      password[3] = numbers.charAt(random.nextInt(numbers.length()));
+	   
+	      for(int i = 4; i< length ; i++) {
+	         password[i] = combinedChars.charAt(random.nextInt(combinedChars.length()));
+	      }
+	      pwd=toString(password); 
+	     return pwd;
+	   }
+	
+	public static String toString(char[] a) 
+    { 
+        String string = new String(a); 
+        return string; 
+    } 
+	
+	
 	// Application Form Report from db to excel
 	public static ByteArrayInputStream toexcelAFReport(List<USAFReportEntity> afreportlist) {
 

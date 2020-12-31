@@ -120,6 +120,10 @@ public class DealsService {
 		return repo.findAll();
 	}	
 	
+	public List<DealEntity> fetchDealLead(String dealLead) {
+		return repo.findDealsByLead(dealLead);
+	}	
+	
 	public DealEntity loadDetails(String emailId) {
 		DealEntity deal = new DealEntity();
 		String username = getUserName(emailId);

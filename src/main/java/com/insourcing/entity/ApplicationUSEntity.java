@@ -1,235 +1,88 @@
 package com.insourcing.entity;
 
 import java.util.Arrays;
-
 import java.util.Date;
 
 import com.insourcing.model.EducationModel;
 
-//@Entity
-//@Table(name = "us_app_form")
 public class ApplicationUSEntity {
 
-	// @Id
-	// @Column(name = "emailid", nullable = false)
-	// @JsonProperty("emailid")
-	private String emailid;
-	// @Column(name = "appflag")
-	// @JsonProperty("appflag")
 	private boolean appflag;
-	// @Column(name = "resume_status")
-	// @JsonProperty("resumeStatus")
 	private String resumeStatus;
-	// @Column(name = "app_completed_date")
-	// @JsonProperty("appCompletedDate")
 	private Date appCompletedDate;
-	// @Column(name = "street_address")
-	// @JsonProperty("streetAddress")
 	private String streetAddress;
-	// @Column(name = "apartment_unit")
-	// @JsonProperty("apartmentUnit")
 	private String apartmentUnit;
-	// @Column(name = "state")
-	// @JsonProperty("state")
 	private String state;
-	// @Column(name = "zipCode")
-	// @JsonProperty("zipCode")
 	private String zipCode;
-	// @Column(name = "date")
-	// @JsonProperty("date")
 	private Date date;
-	// @Column(name = "date_available")
-	// @JsonProperty("dateAvailable")
 	private Date dateAvailable;
-	// @Column(name = "current_work_location")
-	// @JsonProperty("currentWorkLocation")
 	private String currentWorkLocation;
-	// @Column(name = "total_exp")
-	// @JsonProperty("totalExp")
 	private String totalExp;
-	// @Column(name = "total_relevant_exp")
-	// @JsonProperty("totalRelExp")
 	private String totalRelExp;
-	// @Column(name = "under_18_provide_work_permit")
-	// @JsonProperty("under18ProvideWorkPermit")
 	private String under18ProvideWorkPermit;
-	// @Column(name = "offer_emp_extend_demonstrate_work_in_US")
-	// @JsonProperty("offerEmpExtDemWorkUS")
 	private String offerEmpExtDemWorkUS;
-	// @Column(name = "require_sponsorship")
-	// @JsonProperty("reqSponsorship")
 	private String reqSponsorship;
-	// @Column(name = "ex_TCS_employee")
-	// @JsonProperty("exTCSEmployee")
 	private String exTCSEmployee;
-	// @Column(name = "if_yes_when")
-	// @JsonProperty("ifYesWhen")
 	private String ifYesWhen;
-	// @Column(name = "com")
-	// @JsonProperty("com")
 	private String[] com;
-	// @Column(name = "com_phone")
-	// @JsonProperty("comPhone")
 	private String[] comPhone;
-	// @Column(name = "com_address")
-	// @JsonProperty("comAddress")
 	private String[] comAddress;
-	// @Column(name = "com_supervisor")
-	// @JsonProperty("comSupervisor")
 	private String[] comSupervisor;
-	// @Column(name = "com_job_title")
-	// @JsonProperty("comJobTitle")
 	private String[] comJobTitle;
-	// @Column(name = "com_responsibilities")
-	// @JsonProperty("comResponsibilities")
 	private String[] comResponsibilities;
-	// @Column(name = "com_from")
-	// @JsonProperty("comFrom")
 	private Date[] comFrom;
-	// @Column(name = "com_to")
-	// @JsonProperty("comTo")
 	private Date[] comTo;
-	// @Column(name = "com_reason_for_leaving")
-	// @JsonProperty("comReasonForLeaving")
 	private String[] comReasonForLeaving;
-	// @Column(name = "com_contact_supervisor_ref")
-	// @JsonProperty("comMayContactSupervisorRef")
 	private String[] comMayContactSupervisorRef;
-	// @Column(name = "hs_address")
-	// @JsonProperty("hsAddress")
 	private String hsInsName;
 	private String hsAddress;
-	// @Column(name = "hs_graduate")
-	// @JsonProperty("hsGraduate")
 	private String hsGraduate;
-	// @Column(name = "hs_degree")
-	// @JsonProperty("hsDegree")
 	private String hsDegree;
-	// @Column(name = "hs_cos")
-	// @JsonProperty("hsCos")
 	private String hsCos;
-	// @Column(name = "hs_GPA_scale")
-	// @JsonProperty("hsGPAScale")
 	private String hsGPAScale;
-	// @Column(name = "associate_address")
-	// @JsonProperty("assosiateAddress")
-	
 	private String assosiateAddress;
 	private String associateInsName;
-	// @Column(name = "associate_graduate")
-	// @JsonProperty("assosiateGraduate")
 	private String assosiateGraduate;
-	// @Column(name = "associate_degree")
-	// @JsonProperty("assosiateDegree")
 	private String assosiateDegree;
-	// @Column(name = "associate_cos")
-	// @JsonProperty("assosiateCos")
 	private String assosiateCos;
-	// @Column(name = "associate_GPA_scale")
-	// @JsonProperty("associateGPAScale")
 	private String associateGPAScale;
-	// @Column(name = "bachelor_address")
-	// @JsonProperty("bachelorAddress")
 	private String bachelorAddress;
 	private String bachelorInsName;
-	// @Column(name = "bachelor_graduate")
-	// @JsonProperty("bachelorGraduate")
 	private String bachelorGraduate;
-	// @Column(name = "bachelor_degree")
-	// @JsonProperty("bachelorDegree")
 	private String bachelorDegree;
-	// @Column(name = "bachelor_cos")
-	// @JsonProperty("bachelorCos")
 	private String bachelorCos;
-	// @Column(name = "bachelor_GPA_scale")
-	// @JsonProperty("bachelorGPAScale")
 	private String bachelorGPAScale;
-	// @Column(name = "master_address")
-	// @JsonProperty("masterAddress")
 	private String masterAddress;
 	private String masterInsName;
-	// @Column(name = "master_graduate")
-	// @JsonProperty("masterGraduate")
 	private String masterGraduate;
-	// @Column(name = "master_degree")
-	// @JsonProperty("masterDegree")
 	private String masterDegree;
-	// @Column(name = "master_cos")
-	// @JsonProperty("masterCos")
 	private String masterCos;
-	// @Column(name = "master_GPA_scale")
-	// @JsonProperty("masterGPAScale")
 	private String masterGPAScale;
-	// @Column(name = "doctoral_address")
-	// @JsonProperty("doctoralAddress")
 	private String doctoralAddress;
 	private String doctoralInsName;
-	// @Column(name = "doctoral_graduate")
-	// @JsonProperty("doctoralGraduate")
 	private String doctoralGraduate;
-	// @Column(name = "doctoral_degree")
-	// @JsonProperty("doctoralDegree")
 	private String doctoralDegree;
-	// @Column(name = "doctoral_cos")
-	// @JsonProperty("doctoralCos")
 	private String doctoralCos;
-	// @Column(name = "doctoral_GPA_scale")
-	// @JsonProperty("doctoralGPAScale")
 	private String doctoralGPAScale;
-	// @Column(name = "others_address")
-	// @JsonProperty("othersAddress")
 	private String othersAddress;
 	private String otherInsName;
-	// @Column(name = "others_graduate")
-	// @JsonProperty("othersGraduate")
 	private String othersGraduate;
-	// @Column(name = "others_degree")
-	// @JsonProperty("othersDegree")
 	private String othersDegree;
-	// @Column(name = "others_cos")
-	// @JsonProperty("othersCos")
 	private String othersCos;
-	// @Column(name = "others_GPA_scale")
-	// @JsonProperty("othersGPAScale")
 	private String othersGPAScale;
-	// @Column(name = "tech_prof")
-	// @JsonProperty("techProf")
 	private String techProf;
-	// @Column(name = "ref_fullname")
-	// @JsonProperty("refFullName")
 	private String[] refFullName;
-	// @Column(name = "ref_relationship")
-	// @JsonProperty("refRelationship")
 	private String[] refRelationship;
-	// @Column(name = "ref_company")
-	// @JsonProperty("refCompany")
 	private String[] refCompany;
-	// @Column(name = "ref_phone")
-	// @JsonProperty("ref_Phone")
 	private String[] ref_Phone;
-	// @Column(name = "ref_email")
-	// @JsonProperty("refEmail")
 	private String[] refEmail;
-	// @Column(name = "ref_address")
-	// @JsonProperty("refAddress")
 	private String[] refAddress;
-	// @Column(name = "rel_mili_training_exp")
-	// @JsonProperty("relMiliTrainingExp")
 	private String relMiliTrainingExp;
-	// @Column(name = "disclaimer_sign")
-	// @JsonProperty("disclaimerSign")
 	private String disclaimerSign;
-	// @Column(name = "name")
-	// @JsonProperty("name")
 	private String name;
-	// @Column(name = "signature")
-	// @JsonProperty("signature")
-	private byte[] signature;
-	// @Column(name = "date1")
-	// @JsonProperty("date1")
+	private String signature;
 	private Date date1;
 	private String key;
-	
 	private String education;
 	private EducationModel[] educationDetails;
 	private String[] instituteName;
@@ -239,8 +92,108 @@ public class ApplicationUSEntity {
     private String[] cos;
     private String[] GPA;
     private String[] educationalLevel;
-    
-   	public String getAssociateInsName() {
+	// Extra fields
+	private String dealId;
+	private String fieldOne;
+	private String fieldTwo;
+	private String fieldThree;
+	private String fieldFour;
+	private String fieldFive;
+	private String fieldSix;
+	private String fieldSeven;
+	private String fieldEight;
+	private String fieldNine;
+	private String fieldTen;
+
+	public String getDealId() {
+		return dealId;
+	}
+
+	public void setDealId(String dealId) {
+		this.dealId = dealId;
+	}
+
+	public String getFieldOne() {
+		return fieldOne;
+	}
+
+	public void setFieldOne(String fieldOne) {
+		this.fieldOne = fieldOne;
+	}
+
+	public String getFieldTwo() {
+		return fieldTwo;
+	}
+
+	public void setFieldTwo(String fieldTwo) {
+		this.fieldTwo = fieldTwo;
+	}
+
+	public String getFieldThree() {
+		return fieldThree;
+	}
+
+	public void setFieldThree(String fieldThree) {
+		this.fieldThree = fieldThree;
+	}
+
+	public String getFieldFour() {
+		return fieldFour;
+	}
+
+	public void setFieldFour(String fieldFour) {
+		this.fieldFour = fieldFour;
+	}
+
+	public String getFieldFive() {
+		return fieldFive;
+	}
+
+	public void setFieldFive(String fieldFive) {
+		this.fieldFive = fieldFive;
+	}
+
+	public String getFieldSix() {
+		return fieldSix;
+	}
+
+	public void setFieldSix(String fieldSix) {
+		this.fieldSix = fieldSix;
+	}
+
+	public String getFieldSeven() {
+		return fieldSeven;
+	}
+
+	public void setFieldSeven(String fieldSeven) {
+		this.fieldSeven = fieldSeven;
+	}
+
+	public String getFieldEight() {
+		return fieldEight;
+	}
+
+	public void setFieldEight(String fieldEight) {
+		this.fieldEight = fieldEight;
+	}
+
+	public String getFieldNine() {
+		return fieldNine;
+	}
+
+	public void setFieldNine(String fieldNine) {
+		this.fieldNine = fieldNine;
+	}
+
+	public String getFieldTen() {
+		return fieldTen;
+	}
+
+	public void setFieldTen(String fieldTen) {
+		this.fieldTen = fieldTen;
+	}
+
+	public String getAssociateInsName() {
 		return associateInsName;
 	}
 
@@ -369,14 +322,6 @@ public class ApplicationUSEntity {
 
 	public ApplicationUSEntity() {
 		super();
-	}
-
-	public String getEmailid() {
-		return emailid;
-	}
-
-	public void setEmailid(String emailid) {
-		this.emailid = emailid;
 	}
 
 	public boolean isAppflag() {
@@ -915,11 +860,11 @@ public class ApplicationUSEntity {
 		this.name = name;
 	}
 
-	public byte[] getSignature() {
+	public String getSignature() {
 		return signature;
 	}
 
-	public void setSignature(byte[] signature) {
+	public void setSignature(String signature) {
 		this.signature = signature;
 	}
 
@@ -933,35 +878,45 @@ public class ApplicationUSEntity {
 
 	@Override
 	public String toString() {
-		return "USApplicationEntity [emailid=" + emailid + ", appflag=" + appflag + ", resumeStatus=" + resumeStatus
-				+ ", appCompletedDate=" + appCompletedDate + ", streetAddress=" + streetAddress + ", apartmentUnit="
-				+ apartmentUnit + ", state=" + state + ", zipCode=" + zipCode + ", date=" + date + ", dateAvailable="
-				+ dateAvailable + ", currentWorkLocation=" + currentWorkLocation + ", totalExp=" + totalExp
-				+ ", totalRelExp=" + totalRelExp + ", under18ProvideWorkPermit=" + under18ProvideWorkPermit
-				+ ", offerEmpExtDemWorkUS=" + offerEmpExtDemWorkUS + ", reqSponsorship=" + reqSponsorship
-				+ ", exTCSEmployee=" + exTCSEmployee + ", ifYesWhen=" + ifYesWhen + ", com=" + Arrays.toString(com)
-				+ ", comPhone=" + Arrays.toString(comPhone) + ", comAddress=" + Arrays.toString(comAddress)
-				+ ", comSupervisor=" + Arrays.toString(comSupervisor) + ", comJobTitle=" + Arrays.toString(comJobTitle)
+		return "ApplicationUSEntity [appflag=" + appflag + ", resumeStatus=" + resumeStatus + ", appCompletedDate="
+				+ appCompletedDate + ", streetAddress=" + streetAddress + ", apartmentUnit=" + apartmentUnit
+				+ ", state=" + state + ", zipCode=" + zipCode + ", date=" + date + ", dateAvailable=" + dateAvailable
+				+ ", currentWorkLocation=" + currentWorkLocation + ", totalExp=" + totalExp + ", totalRelExp="
+				+ totalRelExp + ", under18ProvideWorkPermit=" + under18ProvideWorkPermit + ", offerEmpExtDemWorkUS="
+				+ offerEmpExtDemWorkUS + ", reqSponsorship=" + reqSponsorship + ", exTCSEmployee=" + exTCSEmployee
+				+ ", ifYesWhen=" + ifYesWhen + ", com=" + Arrays.toString(com) + ", comPhone="
+				+ Arrays.toString(comPhone) + ", comAddress=" + Arrays.toString(comAddress) + ", comSupervisor="
+				+ Arrays.toString(comSupervisor) + ", comJobTitle=" + Arrays.toString(comJobTitle)
 				+ ", comResponsibilities=" + Arrays.toString(comResponsibilities) + ", comFrom="
 				+ Arrays.toString(comFrom) + ", comTo=" + Arrays.toString(comTo) + ", comReasonForLeaving="
 				+ Arrays.toString(comReasonForLeaving) + ", comMayContactSupervisorRef="
-				+ Arrays.toString(comMayContactSupervisorRef) + ", hsAddress=" + hsAddress + ", hsGraduate="
-				+ hsGraduate + ", hsDegree=" + hsDegree + ", hsCos=" + hsCos + ", hsGPAScale=" + hsGPAScale
-				+ ", assosiateAddress=" + assosiateAddress + ", assosiateGraduate=" + assosiateGraduate
-				+ ", assosiateDegree=" + assosiateDegree + ", assosiateCos=" + assosiateCos + ", associateGPAScale="
-				+ associateGPAScale + ", bachelorAddress=" + bachelorAddress + ", bachelorGraduate=" + bachelorGraduate
+				+ Arrays.toString(comMayContactSupervisorRef) + ", hsInsName=" + hsInsName + ", hsAddress=" + hsAddress
+				+ ", hsGraduate=" + hsGraduate + ", hsDegree=" + hsDegree + ", hsCos=" + hsCos + ", hsGPAScale="
+				+ hsGPAScale + ", assosiateAddress=" + assosiateAddress + ", associateInsName=" + associateInsName
+				+ ", assosiateGraduate=" + assosiateGraduate + ", assosiateDegree=" + assosiateDegree
+				+ ", assosiateCos=" + assosiateCos + ", associateGPAScale=" + associateGPAScale + ", bachelorAddress="
+				+ bachelorAddress + ", bachelorInsName=" + bachelorInsName + ", bachelorGraduate=" + bachelorGraduate
 				+ ", bachelorDegree=" + bachelorDegree + ", bachelorCos=" + bachelorCos + ", bachelorGPAScale="
-				+ bachelorGPAScale + ", masterAddress=" + masterAddress + ", masterGraduate=" + masterGraduate
-				+ ", masterDegree=" + masterDegree + ", masterCos=" + masterCos + ", masterGPAScale=" + masterGPAScale
-				+ ", doctoralAddress=" + doctoralAddress + ", doctoralGraduate=" + doctoralGraduate
-				+ ", doctoralDegree=" + doctoralDegree + ", doctoralCos=" + doctoralCos + ", doctoralGPAScale="
-				+ doctoralGPAScale + ", othersAddress=" + othersAddress + ", othersGraduate=" + othersGraduate
+				+ bachelorGPAScale + ", masterAddress=" + masterAddress + ", masterInsName=" + masterInsName
+				+ ", masterGraduate=" + masterGraduate + ", masterDegree=" + masterDegree + ", masterCos=" + masterCos
+				+ ", masterGPAScale=" + masterGPAScale + ", doctoralAddress=" + doctoralAddress + ", doctoralInsName="
+				+ doctoralInsName + ", doctoralGraduate=" + doctoralGraduate + ", doctoralDegree=" + doctoralDegree
+				+ ", doctoralCos=" + doctoralCos + ", doctoralGPAScale=" + doctoralGPAScale + ", othersAddress="
+				+ othersAddress + ", otherInsName=" + otherInsName + ", othersGraduate=" + othersGraduate
 				+ ", othersDegree=" + othersDegree + ", othersCos=" + othersCos + ", othersGPAScale=" + othersGPAScale
 				+ ", techProf=" + techProf + ", refFullName=" + Arrays.toString(refFullName) + ", refRelationship="
 				+ Arrays.toString(refRelationship) + ", refCompany=" + Arrays.toString(refCompany) + ", ref_Phone="
 				+ Arrays.toString(ref_Phone) + ", refEmail=" + Arrays.toString(refEmail) + ", refAddress="
 				+ Arrays.toString(refAddress) + ", relMiliTrainingExp=" + relMiliTrainingExp + ", disclaimerSign="
-				+ disclaimerSign + ", name=" + name + ", signature=" + signature + ", date1=" + date1 + "]";
+				+ disclaimerSign + ", name=" + name + ", signature=" + signature + ", date1=" + date1 + ", key=" + key
+				+ ", education=" + education + ", educationDetails=" + Arrays.toString(educationDetails)
+				+ ", instituteName=" + Arrays.toString(instituteName) + ", insAddress=" + Arrays.toString(insAddress)
+				+ ", graduate=" + Arrays.toString(graduate) + ", degree=" + Arrays.toString(degree) + ", cos="
+				+ Arrays.toString(cos) + ", GPA=" + Arrays.toString(GPA) + ", educationalLevel="
+				+ Arrays.toString(educationalLevel) + ", dealId=" + dealId + ", fieldOne=" + fieldOne + ", fieldTwo="
+				+ fieldTwo + ", fieldThree=" + fieldThree + ", fieldFour=" + fieldFour + ", fieldFive=" + fieldFive
+				+ ", fieldSix=" + fieldSix + ", fieldSeven=" + fieldSeven + ", fieldEight=" + fieldEight
+				+ ", fieldNine=" + fieldNine + ", fieldTen=" + fieldTen + "]";
 	}
 
 }

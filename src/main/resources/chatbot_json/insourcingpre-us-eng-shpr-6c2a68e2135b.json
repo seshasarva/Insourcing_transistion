@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "insourcingpre-us-eng-shpr",
+  "private_key_id": "6c2a68e2135b7e7c97a94502282297a284ffc4cf",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCokJrsmcSrjeYj\n8fs0TIV7gXSeNDLM23eqtINOjEdwz7ICiRPkcNJoKLGGfinSjhqxjs2SnmlAppSy\nEUyFeJLveTxNXfkYTcFsqZuPyJFcNQKTdObZAmvA1zGlRFBN5ILl4MquxL09H308\nWZEqntEeeo73JqgjvmucAfC+iN4YFbY4G1LoLJjWByOCpcXNfEAEgcZX8dIgX/JJ\nZo2+ogBla/F9xPZ9/FvNoD2DZWMn9bhqtxI/VRrJ0BKRJceddGQ2I8T4v8QKEWkt\nSYSX2GynTIdPwrJMXoe2ewrGJkYAmVJ0CciEMz71FtRDa/G0NlF161BR39jWSTRg\nMopmtaKvAgMBAAECggEAL3Kw4TuxY/bn2qNhKgoGIstAV83qpMZ8K0Vvlpse+u7D\ntTn/qvRlDaOywOBfhmCwu90uGYDUsLmTLoJ3DzTu61CtfDuhA8nTUfJ2EuWKoTFc\nvcQQvPIVAa2xUEtn7V0OyYVamBJSEFP+TRALMDuPMqyd9IzhlFoj8UCMkx10osN4\nxqDBFIN4zYJ2qdE8yT7lHHY5FMHyodB0YExW7wryDG+FkI9433t3B73WViFDhJ8b\n3gUEPPeQtT4vv7GHlF6dRSO3oUz0jwb4LEJOs3nYL7Xr4flVB+grbqI+exsqd7nv\nGDGS8Ya5Pxs5MUxkEBuDvxydZtTpFmEzP2gE2IaDpQKBgQDXZP7+zfrZW2Z667YX\nzu8qkAmK2dCtTlDmlQz/U4HGm4A2NYpCl9/ychWFu0Jeej3K4EdyI6xbt9lWfZCL\nhC3rIGcsrwfyN1cDp17ixjHWmG+CuHpyDUDkBqtZOsMf8Za198FOw3i0V+pcgSiF\nicHva7NKv13mhhdSUyAllZC9rQKBgQDIV5iW1YsCP9/qW1XAip5JXyK/hVTS+duA\nyj6+CGevaekKFTIArNsXYAMdleSW7N1wLBRZ87WZ5xdzSQNovj62tAN0hOj+2Rjs\n5/WYfVF3zhGxzs8Wwd05PMKAa9QWXzcHK/kqVs0yEp31YAhF1kRz/QQ+5JSAYlss\nQ9PhYNZ1SwKBgQCCLr6XznLAkCd+P5yNAzs2JFxAGamwNVdcJdX3M8eJ/E4fdXid\nCyIFbMJpU2anp4ZVafyEld8EiDfJuJZ2XGtMYwc40Iki8iObR7tnoJZat0MeZNVM\nvYnsx8MkaQmp8uA+FwI00pvPlBtH0aBmJX6bcCKrGMJuI7lQvoD9dkpG+QKBgEEH\ntf8X99RWGX+///jMxg549BWI2PzWn7qRa4ZRwh49WaitMprngQJ4Zup+kkGvRz23\nATAlnIgFbCY+x/2C62ZwzkJPNjYrEB0uOhkybHRgDnxR7gSsDvwaTeRTm/dbFsic\nLHfizx52zpEsh+LrZzLjKTKlDdMSmhenOKqKvXI7AoGAHHJr5IBJUZy2TRfKHl52\nzE+bvqC+yNsV7wJYhC2mjErqXzM2fWHizE7piyNhyLHcdE1feUIvn7SrkcZVpkUF\n3+X/+F59dHFnztic+HNg2ckUoSrk8G5XjE7MJ0iEsRDrTVKeS2Zfq0FUhtD5CY+R\nyvMXOJUxhFQ2bPgiG+lXXDA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogflow-jqkpis@insourcingpre-us-eng-shpr.iam.gserviceaccount.com",
+  "client_id": "106439161738058025593",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogflow-jqkpis%40insourcingpre-us-eng-shpr.iam.gserviceaccount.com"
+}

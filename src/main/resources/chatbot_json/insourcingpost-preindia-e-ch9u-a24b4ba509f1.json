@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "insourcingpost-preindia-e-ch9u",
+  "private_key_id": "a24b4ba509f144459cea533d981526bb4bce293e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEugIBADANBgkqhkiG9w0BAQEFAASCBKQwggSgAgEAAoIBAQCxLf+f0C/yRSJl\nx/9apz5XTIAMnpgqfkhk/xxCYov8MMF7HH7wZKZd+xn/jzzXU6z3VgeT+qUWbqzc\nZf1JYzi6xDHS2daiblhDAU4RbFVRtBatEMZ0iv87w9XPiorle/0LWufNkW//hWNo\nfGbD5+wmM28xN4IgQaz0Z/MX8YTRipAm6odoQ16pxIp3yVxiavMlB4kD5kdC/Rxt\n3D2fnyR4l/WYNB+5xAsL6ecPPwyBBYWOPGznLe5NT0sUnDMhy2v1ABMpucjd4bjZ\n1cDUCrOlXvdMBO37RrfG0cHNuNgyHV5gUfaMkur0VDOYcfcoNzfN128l/UAHnOYo\nG3YNZeAlAgMBAAECggEAD7/QfKKzWFw32gdElgjOvFDTAwwn54MRKVUZ7Ha5DcJB\nuJFIYVL5DNqQrYxMcrF/6v5tLwS1HwDYgcDZGmhk9wkQircNYqPfWZlomJjiHqCc\n8WZP1bUzSds3Crs8bHiwfg1nFHlMlNCFDRkdw2U+swiYZi4SdY6Q8qq4y5SO41dB\nP6to9m3YsuJPsg481334SOn7AojHrx5fHqUsAUGXIpvSNPgZ/20yCMQS6N6E7o9X\n7Tud4b1yV+KrzD86Mj2qOurhKT0PdULlT188pkPrbR1UNH0gNFuWhcOn8KPN4G41\n8gqM3D0Gr1s7yd8pLqoOwyDssyS6ekrLGUBVWFSeAwKBgQDqJQHYkGrsNyVGuDKz\nPvpyMiysvBKbt6jT9UBBScR0XyB/hK8XfKuIAb3fEu905MLhB5qhNwtFQM4Bhl2s\n9bCJks/Ra68uNOxH4SCrFBNP1uCOypVvu83hQmOuSVtret/FgUZqiQUYfjpKWOTz\nBdW936lU3b4vOdP7JW+iNJRpBwKBgQDBt8oGlfsR5BvjbWoxceOa0LK+BiOCEJxz\nqwXoaNstEczam+kYhNlX0mEhdD07aS84PiSuE1kgTNyHzpQFZMcgfuxstxEC7Tu6\nTbHEJPhkZftlG59+iMfr+ATMNCezlpuZsfU/0rFEU8ix5S5E2cBmbsavsPhD7sDh\nhDOGTJ0+cwJ/Ar5sRx1qI1qCFVITRgZ26N+tpliN30VHtTQqjJlQtAxpVRU4+A19\n9RoQH40ZQUVtAzYTmdALUcRwpZPthRlb+EDALrQUWXZFTpJUz6xsjYL3HrVBCw4o\nW3trr58scxX9iVL6gEUayi6wgC6KgE6RMqhsU5JFqEgFM+w8Yqo7EwKBgBqL6iaO\n5RIllWDMPLI77jnoAaaixrjrN9VuCWg4/lglyVHn7cCLbBFp5h+kg0Oh/XOSqIom\nYp9XiR0fRQ+cKOGeIx4e1Dj3c6jrPsInYta3VwUbDPdVHTiMC3REbXBh4j7ksTwm\nzl4TsTwXsQiEYqZm5dlrwgnlLQ96g2kTFLVbAoGANFnHI8kLw09iArcf9GXhADNP\nfWaLtiVOKlTLXsuXQULP/NsqQSLHStzLkrfbr1lWmmdOEo/cJSaM7NGRdUraQf8V\n5mqRVe5gktHmSB+umej4nR+xX58FoTfngPvN+jQd5eUC5iGw0sSoC/Wm3KAT6LCo\nm1jxbg3MoQOPt6u+p/c=\n-----END PRIVATE KEY-----\n",
+  "client_email": "dialogflow-bdgkdb@insourcingpost-preindia-e-ch9u.iam.gserviceaccount.com",
+  "client_id": "116548790634793485719",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dialogflow-bdgkdb%40insourcingpost-preindia-e-ch9u.iam.gserviceaccount.com"
+}

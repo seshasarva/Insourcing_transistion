@@ -2,6 +2,8 @@ package com.insourcing.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +26,19 @@ import com.insourcing.entity.InterviewScheduleEntity;
 import com.insourcing.entity.JourneyEntity;
 import com.insourcing.entity.RecruiterProfileEntity;
 import com.insourcing.services.TransistionService;
+import com.insourcing.validator.TokenValidator;
 
 @RestController
-@RequestMapping("/transistion")
+@RequestMapping("/hrbc/transistion")
 public class TransistionController {
+	private static final String HEADER = "Authorization";
+	private static final String PREFIX = "Bearer ";
 	@Autowired
 	TransistionService service;
-	
+	@Autowired
+	TokenValidator tokenValidator;
+	@Autowired
+	HttpServletRequest request;
 	@GetMapping("/fetchExploreTcsDetails")
 	public List<ExploreTcsEntity> fetchExploreTcsDetails(@RequestParam String id) {
 		return service.fetchExploreTcsDetails(id);
@@ -117,7 +125,7 @@ public class TransistionController {
 	
 	@PostMapping("/fetchRecruiterProfile")
 	public ObjectNode fetchRecruiterProfile(@RequestBody String filter,
-			@RequestParam String username) {
+			@RequestParam String username) throws JsonMappingException, JsonProcessingException {
 		//String username = (String) request.getAttribute("username");
 
 		return service.fetchRecruiterDetails(filter, username);
@@ -137,5 +145,11 @@ public class TransistionController {
 	public boolean uploadRecruiterProfileImg(@RequestPart("file") MultipartFile file,
 			@RequestParam int id) {
 		return service.uploadRecruiterProfileImage(id, file);
+	}
+	
+	public String getMailId() {
+		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
+		String emailId = tokenValidator.decodeEmailId(jwtToken);
+		return emailId;
 	}
 }

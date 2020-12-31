@@ -1,21 +1,27 @@
 package com.insourcing.services;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import com.insourcing.entity.*;
+
+import com.insourcing.entity.CandidateEntityMap;
+import com.insourcing.entity.HRLoginEntity;
+import com.insourcing.entity.HRPwdHistoryEntityMap;
+import com.insourcing.entity.PasswordHistoryEntityMap;
 import com.insourcing.helper.TokenGenerator;
 import com.insourcing.model.HRFormRequest;
 import com.insourcing.model.HRFormResponse;
-import com.insourcing.repository.*;
-
-import org.modelmapper.ModelMapper;
+import com.insourcing.repository.CandidateRepo;
+import com.insourcing.repository.HRLoginRepo;
+import com.insourcing.repository.HRPwdHistoryRepo;
+import com.insourcing.repository.PwdHistoryRepo;
 
 @Service
 public class HRService {
@@ -25,6 +31,15 @@ public class HRService {
 
 	@Autowired
 	HRLoginRepo hrRepository;
+
+	@Autowired
+	public CandidateRepo candRepo;
+
+	@Autowired
+	HRPwdHistoryRepo hrPwdHistoryRepo;
+
+	@Autowired
+	PwdHistoryRepo pwdHistoryRepo;
 
 	ModelMapper modelMapper;
 
@@ -66,59 +81,103 @@ public class HRService {
 		return message;
 	}
 
+	public HRFormResponse candidateLoginFailure() {
+		HRFormResponse hrFormResponse = new HRFormResponse();
+		hrFormResponse.setAuthenticationCode(HttpStatus.UNAUTHORIZED);
+		return hrFormResponse;
+	}
+
 	public HRFormResponse login(String emailId, String password) {
 		logger.info("hrLogin - Entry");
-		HRLoginEntity hrEntityMap;
+
 		HRFormResponse hrFormResponse = new HRFormResponse();
-		//hrEntityMap = hrRepository.findByEmailId(emailId);
-		Optional<HRLoginEntity> row = hrRepository.findById(emailId);
-		hrEntityMap=row.get();
-		hrFormResponse = authenticateUser(emailId, password, hrEntityMap, hrFormResponse);
+		HRLoginEntity hrEntityMap = hrRepository.findByEmailId(emailId);
+
+		if (null != hrEntityMap && hrEntityMap.getIncorrectLoginAttempt() > 4) {
+			long timeDifference = Duration.between(hrEntityMap.getAccountLockedTime(), LocalDateTime.now()).toMinutes();
+			// hrFormResponse.setLoginTimeDifference(timeDifference);
+			if (timeDifference > 60) {
+				hrFormResponse = authenticateUser(emailId, password, hrEntityMap, hrFormResponse);
+			} else {
+				hrFormResponse.setAuthenticationCode(HttpStatus.UNAUTHORIZED);
+				hrFormResponse.setInCorrectLoginAttempt(hrEntityMap.getIncorrectLoginAttempt());
+				logger.info("Incorrect login attempt {}", hrEntityMap.getIncorrectLoginAttempt());
+				return hrFormResponse;
+			}
+		} else if (null != hrEntityMap) {
+			hrFormResponse = authenticateUser(emailId, password, hrEntityMap, hrFormResponse);
+			logger.info("In else part Incorrect login attempt {}", hrEntityMap.getIncorrectLoginAttempt());
+		} else {
+			hrFormResponse.setAuthenticationCode(HttpStatus.UNAUTHORIZED);
+		}
+
 		logger.info("hrLogin - Exit");
 		return hrFormResponse;
 	}
 
 	private HRFormResponse authenticateUser(String email, String password, HRLoginEntity hrLoginEntity,
 			HRFormResponse hrFormResponse) {
-		if (isHRAuthenticated(email, password)) {
-		//	if (true) {
-			logger.info("HRLogin - authentication sucessfull"+hrLoginEntity);
-			if (null != hrLoginEntity) {
+
+		if (!email.isEmpty() && isHRAuthenticated(hrLoginEntity, email, password)) {
+			hrLoginEntity = hrRepository.findByEmailId(email);
+			logger.info("HRLogin - authentication sucessfull");
+			if (null != hrLoginEntity && !hrLoginEntity.isHRLoggedIn()) {
+				String jwtToken = TokenGenerator.getJWTToken(hrLoginEntity.getEmailId());
 				hrFormResponse = new ModelMapper().map(hrLoginEntity, HRFormResponse.class);
-				hrFormResponse.setJwtToken(TokenGenerator.getJWTToken(hrLoginEntity.getEmailId()));
+				hrFormResponse.setJwtToken(jwtToken);
 				hrFormResponse.setAuthenticationCode(HttpStatus.OK);
 				hrLoginEntity.setLastLoginTime(LocalDateTime.now());
 				hrLoginEntity.setHRLoggedIn(true);
 				hrLoginEntity.setIncorrectLoginAttempt(ZERO);
+				hrLoginEntity.setLastLoginTime(LocalDateTime.now());
+				hrLoginEntity.setGenToken(jwtToken.replace("Bearer ", ""));
 				hrRepository.save(hrLoginEntity);
 			} else {
 				hrFormResponse.setAuthenticationCode(HttpStatus.CONFLICT);
-				return hrFormResponse;
+				hrFormResponse.setJwtToken(hrLoginEntity.getGenToken());
 			}
 		} else {
 			hrFormResponse.setAuthenticationCode(HttpStatus.UNAUTHORIZED);
-			hrLoginEntity.setIncorrectLoginAttempt(hrLoginEntity.getIncorrectLoginAttempt() + 1);
-			hrRepository.save(hrLoginEntity);
 			hrFormResponse.setInCorrectLoginAttempt(hrLoginEntity.getIncorrectLoginAttempt());
 			logger.info("HRLogin - authentication failed");
 		}
 		return hrFormResponse;
 	}
 
-	private boolean isHRAuthenticated(String emailId, String password) {
+	private boolean isHRAuthenticated(HRLoginEntity hrEntityMap, String emailId, String password) {
 		logger.info("HRLogin - user authentication");
 		boolean isAuthenticated = false;
-		HRLoginEntity hrEntityMap = null;
-		if (!emailId.isEmpty()) {
-			hrEntityMap = hrRepository.findByEmailId(emailId);
-			if (null != hrEntityMap) {
+		if (emailId != null) {
+			if (password != null) {
 				isAuthenticated = encryptService.isPasswordMatching(password, hrEntityMap.getPassword());
+				if (null != hrEntityMap) {
+					if (isAuthenticated) {
+						hrEntityMap.setIncorrectLoginAttempt(ZERO);
+					} else {
+						if (password.equals(hrEntityMap.getPassword())) {
+							hrEntityMap.setPassword(encryptService.encryptPassword(password));
+							hrRepository.save(hrEntityMap);
+							return true;
+						}
+						hrEntityMap.setIncorrectLoginAttempt(hrEntityMap.getIncorrectLoginAttempt() + 1);
+						if (hrEntityMap.getIncorrectLoginAttempt() == 5) {
+							hrEntityMap.setAccountLockedTime(LocalDateTime.now());
+
+						}
+					}
+					hrRepository.save(hrEntityMap);
+				}
+			} else {
+				isAuthenticated = false;
 			}
+		} else {
+			isAuthenticated = false;
 		}
+
 		return isAuthenticated;
 	}
 
-	public HRFormResponse hrLogout(String email) {
+	public HRFormResponse hrLogout(String email, String expiredToken) {
 		HRLoginEntity hrLoginEntity = null;
 		HRFormResponse hrFormResponse = new HRFormResponse();
 		modelMapper = new ModelMapper();
@@ -127,6 +186,7 @@ public class HRService {
 			hrLoginEntity = hrRepository.findByEmailId(email);
 			if (null != hrLoginEntity) {
 				hrLoginEntity.setHRLoggedIn(false); // update logout flag
+				hrLoginEntity.setExpiredToken(expiredToken);
 				hrRepository.save(hrLoginEntity);
 				hrFormResponse.setAuthenticationCode(HttpStatus.ACCEPTED);
 			}
@@ -157,4 +217,112 @@ public class HRService {
 		}
 		return message;
 	}
+	public String changeCandPwdByHR(String emailId, String newPassword) {
+		logger.info("Change candidate password - Entry");
+		logger.info(emailId);
+		String message = null;
+		try {
+			CandidateEntityMap candidateEntityMap = candRepo.findByEmailid(emailId);
+			PasswordHistoryEntityMap passwordHistoryEntityMap = pwdHistoryRepo.findByEmailId(emailId);
+			logger.info(candidateEntityMap);
+			if (null != candidateEntityMap) {
+
+				if (candidateEntityMap.getPassword().length() == 8) {
+					candidateEntityMap.setPassword(encryptService.encryptPassword(candidateEntityMap.getPassword()));
+				}
+				if (passwordHistoryEntityMap.getPassword1().length() == 8) {
+					passwordHistoryEntityMap
+							.setPassword1(encryptService.encryptPassword(passwordHistoryEntityMap.getPassword1()));
+				}
+				if (encryptService.isPasswordMatching(newPassword, candidateEntityMap.getPassword())
+						|| encryptService.isPasswordMatching(newPassword, passwordHistoryEntityMap.getPassword1())
+						|| encryptService.isPasswordMatching(newPassword, passwordHistoryEntityMap.getPassword2())
+						|| encryptService.isPasswordMatching(newPassword, passwordHistoryEntityMap.getPassword3())) {
+					message = "Old_and_New_Password_cannot_be_same";
+				} else {
+
+					if (passwordHistoryEntityMap.getPassword2() == null
+							&& passwordHistoryEntityMap.getPassword3() == null) {
+						passwordHistoryEntityMap.setPassword2(encryptService.encryptPassword(newPassword));
+						candidateEntityMap.setPassword(passwordHistoryEntityMap.getPassword2());
+					} else if (passwordHistoryEntityMap.getPassword2() != null
+							&& passwordHistoryEntityMap.getPassword3() == null) {
+						passwordHistoryEntityMap.setPassword3(encryptService.encryptPassword(newPassword));
+						candidateEntityMap.setPassword(passwordHistoryEntityMap.getPassword3());
+					} else {
+						passwordHistoryEntityMap.setPassword1(passwordHistoryEntityMap.getPassword2());
+						passwordHistoryEntityMap.setPassword2(passwordHistoryEntityMap.getPassword3());
+						passwordHistoryEntityMap.setPassword3(encryptService.encryptPassword(newPassword));
+						candidateEntityMap.setPassword(passwordHistoryEntityMap.getPassword3());
+					}
+					pwdHistoryRepo.save(passwordHistoryEntityMap);
+					candRepo.save(candidateEntityMap);
+
+					message = "success";
+					}
+				}
+		} catch (Exception exce) {
+			message = "Candidate not registered";
+			logger.error("exception occurred", exce);
+		}
+		logger.info("Change candidate password - Exit");
+		return message;
+	}
+
+	public String checkHRDetails(String emailId, String newPassword) {
+		logger.info("Change HR password - Entry");
+		logger.info(emailId);
+		String message = null;
+		try {
+			HRLoginEntity hrLoginEntity = hrRepository.findByEmailId(emailId);
+			HRPwdHistoryEntityMap passwordHistoryEntityMap = hrPwdHistoryRepo.findByEmailId(emailId);
+			logger.info(hrLoginEntity);
+
+			if (null != hrLoginEntity) {
+				if (hrLoginEntity.getPassword().length() == 8) {
+					hrLoginEntity.setPassword(encryptService.encryptPassword(hrLoginEntity.getPassword()));
+
+				}
+				if (passwordHistoryEntityMap.getPassword1().length() == 8) {
+
+					passwordHistoryEntityMap
+							.setPassword1(encryptService.encryptPassword(passwordHistoryEntityMap.getPassword1()));
+				}
+
+				if (encryptService.isPasswordMatching(newPassword, hrLoginEntity.getPassword())
+						|| encryptService.isPasswordMatching(newPassword, passwordHistoryEntityMap.getPassword1())
+						|| encryptService.isPasswordMatching(newPassword, passwordHistoryEntityMap.getPassword2())
+						|| encryptService.isPasswordMatching(newPassword, passwordHistoryEntityMap.getPassword3())) {
+					message = "Old_and_New_Password_cannot_be_same";
+				} else {
+
+					if (passwordHistoryEntityMap.getPassword2() == null
+							&& passwordHistoryEntityMap.getPassword3() == null) {
+						passwordHistoryEntityMap.setPassword2(encryptService.encryptPassword(newPassword));
+						hrLoginEntity.setPassword(passwordHistoryEntityMap.getPassword2());
+					} else if (passwordHistoryEntityMap.getPassword2() != null
+							&& passwordHistoryEntityMap.getPassword3() == null) {
+						passwordHistoryEntityMap.setPassword3(encryptService.encryptPassword(newPassword));
+						hrLoginEntity.setPassword(passwordHistoryEntityMap.getPassword3());
+					} else {
+						passwordHistoryEntityMap.setPassword1(passwordHistoryEntityMap.getPassword2());
+						passwordHistoryEntityMap.setPassword2(passwordHistoryEntityMap.getPassword3());
+						passwordHistoryEntityMap.setPassword3(encryptService.encryptPassword(newPassword));
+						hrLoginEntity.setPassword(passwordHistoryEntityMap.getPassword3());
+					}
+					hrPwdHistoryRepo.save(passwordHistoryEntityMap);
+					hrRepository.save(hrLoginEntity);
+
+					message = "success";
+				}
+					}
+
+		} catch (Exception exce) {
+			message = "HR not registered";
+			logger.error("exception occurred", exce);
+		}
+		logger.info("Changed HR password - Exit");
+		return message;
+	}
+
 }

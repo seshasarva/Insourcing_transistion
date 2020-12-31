@@ -38,5 +38,45 @@
     "name": "insource.app.swagger_apis",
     "type": "java.lang.String",
     "description": "A description for 'insource.app.swagger_apis'"
+  },
+  {
+    "name": "insource.app.supported_excel_file_type",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.supported_excel_file_type'"
+  },
+  {
+    "name": "insource.app.supported_pdf_file_type",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.supported_pdf_file_type'"
+  },
+  {
+    "name": "insource.app.supported_excel_file_type",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.supported_excel_file_type'"
+  },
+  {
+    "name": "insource.app.supported_excel_file_type",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.supported_excel_file_type'"
+  },
+  {
+    "name": "email.feature.switch",
+    "type": "java.lang.String",
+    "description": "A description for 'email.feature.switch'"
+  },
+  {
+    "name": "insource.app.supported_doc_file_type",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.supported_doc_file_type'"
+  },
+  {
+    "name": "insource.app.deals.countries",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.deals.countries'"
+  },
+  {
+    "name": "insource.app.deals.countries",
+    "type": "java.lang.String",
+    "description": "A description for 'insource.app.deals.countries'"
   }
 ]}

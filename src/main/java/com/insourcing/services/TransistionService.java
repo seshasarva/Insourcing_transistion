@@ -500,7 +500,9 @@ public class TransistionService {
 		
 	}
 	
-	public ObjectNode fetchRecruiterDetails(String filter, String userName) {
+	public ObjectNode fetchRecruiterDetails(String filter, String userName) throws JsonMappingException, JsonProcessingException {
+		if(true)
+			return populateRecruiterDetails(filter, userName);
 		ObjectMapper mapper = new ObjectMapper();
 		ObjectNode parent = mapper.createObjectNode();
 		//List<String> list = new ArrayList<String>();
@@ -521,7 +523,7 @@ public class TransistionService {
 
 	}
 	
-	public void populateRecruiterDetails(String filter, String userName) throws JsonMappingException, JsonProcessingException {
+	public ObjectNode populateRecruiterDetails(String filter, String userName) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonFilter = mapper.readTree(filter);
 		ObjectNode parent = mapper.createObjectNode();
@@ -546,22 +548,34 @@ public class TransistionService {
 		int allAdditions = 0;
 		int joined = 0;
 		int activeCount = 0;
+		System.out.println("deal size"+allDeals.size());
 		for(DealEntity deal : allDeals) {
+			boolean isPresent = false;
+			for(JsonNode each : array) {
+				if(each.asText().equals(deal.getClientName())) {
+					isPresent = true;
+				}
+			}
+			if(!isPresent)
+				array.add(deal.getClientName());
 			if(!"all".equalsIgnoreCase(status) && !status.equalsIgnoreCase(deal.getDealStatus())) {
 				continue;
 			}
 			if(!"all".equalsIgnoreCase(client) && !client.equalsIgnoreCase(deal.getClientName())) {
 				continue;
 			}
-			array.add(deal.getClientName());
-			if(deal.getDealStatus().equalsIgnoreCase("active")) activeCount++;
+			
+			if(deal.getDealStatus().equalsIgnoreCase("open")) activeCount++;
 			List<CandidateEntityMap> allCandidates = candidateRepo.findByDealId(deal.getId());
+			System.out.println("current deal"+allCandidates.size()+":"+deal.getId());
 			allAdditions = allAdditions+allCandidates.size();
 			for(CandidateEntityMap candidateEntity : allCandidates) {
+				System.out.println("status deal"+candidateEntity.getDealId()+":"+candidateEntity.getOfferStatus());
+
 				if(candidateEntity.getOfferStatus().equalsIgnoreCase("joined")) joined++;
 				JsonNode offerStatus = chartNode.get(candidateEntity.getOfferStatus());
 				if(null == offerStatus) {
-					chartNode.put(candidateEntity.getOfferStatus(), 0);
+					chartNode.put(candidateEntity.getOfferStatus(), 1);
 				}else {
 					long value = offerStatus.asLong();
 					chartNode.put(candidateEntity.getOfferStatus(), ++value);
@@ -571,7 +585,13 @@ public class TransistionService {
 		parent.put("active", activeCount);
 		parent.put("total", allAdditions);
 		parent.put("actual", joined);
+		if(allAdditions != 0)
 		parent.put("percent", (joined*100)/allAdditions);
+		else
+		parent.put("percent", 0);
+
+		System.out.println(parent);
+		return parent;
 	}
 	
 	@Autowired

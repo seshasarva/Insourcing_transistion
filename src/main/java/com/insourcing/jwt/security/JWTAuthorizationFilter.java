@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,7 +22,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.Jws;
 import org.springframework.stereotype.Component;
 
-//@Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	private static final String HEADER = "Authorization";
@@ -34,7 +30,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-		System.out.println("doFilterInternal came here----");
 		try {
 			if (checkJWTToken(request, response)) {
 				Claims claims = validateToken(request);
@@ -85,7 +80,5 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 			return false;
 		return true;
 	}
-
-	
 
 }

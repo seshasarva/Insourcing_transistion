@@ -1,7 +1,6 @@
 package com.insourcing.entity;
 
 import java.util.Arrays;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -25,202 +24,136 @@ public class ApplicationUSEntityMap {
 	@Column(name = "app_completed_date")
 	private Date appCompletedDate;
 	@Column(name = "street_address")
-	//@JsonProperty("streetAddress")
 	private String streetAddress;
 	@Column(name = "apartment_unit")
-	//@JsonProperty("apartmentUnit")
 	private String apartmentUnit;
 	@Column(name = "state")
-	//@JsonProperty("state")
 	private String state;
 	@Column(name = "zipCode")
-	//@JsonProperty("zipCode")
 	private String zipCode;
 	@Column(name = "date")
-	//@JsonProperty("date")
 	private Date date;
 	@Column(name = "date_available")
-	//@JsonProperty("dateAvailable")
 	private Date dateAvailable;
 	@Column(name = "current_work_location")
-	//@JsonProperty("currentWorkLocation")
 	private String currentWorkLocation;
 	@Column(name = "total_exp")
-	//@JsonProperty("totalExp")
 	private String totalExp;
 	@Column(name = "total_relevant_exp")
-	//@JsonProperty("totalRelExp")
 	private String totalRelExp;
 	@Column(name = "under_18_provide_work_permit")
-	//@JsonProperty("under18ProvideWorkPermit")
 	private String under18ProvideWorkPermit;
 	@Column(name = "offer_emp_extend_demonstrate_work_in_US")
-	//@JsonProperty("offerEmpExtDemWorkUS")
 	private String offerEmpExtDemWorkUS;
 	@Column(name = "require_sponsorship")
-	//@JsonProperty("reqSponsorship")
 	private String reqSponsorship;
 	@Column(name = "ex_TCS_employee")
-	//@JsonProperty("exTCSEmployee")
 	private String exTCSEmployee;
 	@Column(name = "if_yes_when")
-	//@JsonProperty("ifYesWhen")
 	private String ifYesWhen;
 	@Column(name = "com")
-	//@JsonProperty("com")
 	private String[] com;
 	@Column(name = "com_phone")
-	//@JsonProperty("comPhone")
 	private String[] comPhone;
 	@Column(name = "com_address")
-	//@JsonProperty("comAddress")
 	private String[] comAddress;
 	@Column(name = "com_supervisor")
-	//@JsonProperty("comSupervisor")
 	private String[] comSupervisor;
 	@Column(name = "com_job_title")
-	//@JsonProperty("comJobTitle")
 	private String[] comJobTitle;
 	@Column(name = "com_responsibilities")
-	//@JsonProperty("comResponsibilities")
 	private String[] comResponsibilities;
 	@Column(name = "com_from")
-	//@JsonProperty("comFrom")
 	private Date[] comFrom;
 	@Column(name = "com_to")
-	//@JsonProperty("comTo")
 	private Date[] comTo;
 	@Column(name = "com_reason_for_leaving")
-	//@JsonProperty("comReasonForLeaving")
 	private String[] comReasonForLeaving;
 	@Column(name = "com_contact_supervisor_ref")
-	//@JsonProperty("comMayContactSupervisorRef")
 	private String[] comMayContactSupervisorRef;
 	@Column(name = "hs_address")
-	//@JsonProperty("hsAddress")
 	private String hsAddress;
 	@Column(name = "hs_graduate")
-	//@JsonProperty("hsGraduate")
 	private String hsGraduate;
 	@Column(name = "hs_degree")
-	//@JsonProperty("hsDegree")
 	private String hsDegree;
 	@Column(name = "hs_cos")
-	//@JsonProperty("hsCos")
 	private String hsCos;
 	@Column(name = "hs_GPA_scale")
-	//@JsonProperty("hsGPAScale")
 	private String hsGPAScale;
 	@Column(name = "associate_address")
-	//@JsonProperty("assosiateAddress")
 	private String assosiateAddress;
 	@Column(name = "associate_graduate")
-	//@JsonProperty("assosiateGraduate")
 	private String assosiateGraduate;
 	@Column(name = "associate_degree")
-	//@JsonProperty("assosiateDegree")
 	private String assosiateDegree;
 	@Column(name = "associate_cos")
-	//@JsonProperty("assosiateCos")
 	private String assosiateCos;
 	@Column(name = "associate_GPA_scale")
-	//@JsonProperty("associateGPAScale")
 	private String associateGPAScale;
 	@Column(name = "bachelor_address")
-	//@JsonProperty("bachelorAddress")
 	private String bachelorAddress;
 	@Column(name = "bachelor_graduate")
-	//@JsonProperty("bachelorGraduate")
 	private String bachelorGraduate;
 	@Column(name = "bachelor_degree")
-	//@JsonProperty("bachelorDegree")
 	private String bachelorDegree;
 	@Column(name = "bachelor_cos")
-	//@JsonProperty("bachelorCos")
 	private String bachelorCos;
 	@Column(name = "bachelor_GPA_scale")
-	//@JsonProperty("bachelorGPAScale")
 	private String bachelorGPAScale;
 	@Column(name = "master_address")
-	//@JsonProperty("masterAddress")
 	private String masterAddress;
 	@Column(name = "master_graduate")
-	//@JsonProperty("masterGraduate")
 	private String masterGraduate;
 	@Column(name = "master_degree")
-	//@JsonProperty("masterDegree")
 	private String masterDegree;
 	@Column(name = "master_cos")
-	//@JsonProperty("masterCos")
 	private String masterCos;
 	@Column(name = "master_GPA_scale")
-	//@JsonProperty("masterGPAScale")
 	private String masterGPAScale;
 	@Column(name = "doctoral_address")
-	//@JsonProperty("doctoralAddress")
 	private String doctoralAddress;
 	@Column(name = "doctoral_graduate")
-	//@JsonProperty("doctoralGraduate")
 	private String doctoralGraduate;
 	@Column(name = "doctoral_degree")
-	//@JsonProperty("doctoralDegree")
 	private String doctoralDegree;
 	@Column(name = "doctoral_cos")
-	//@JsonProperty("doctoralCos")
 	private String doctoralCos;
 	@Column(name = "doctoral_GPA_scale")
-	//@JsonProperty("doctoralGPAScale")
 	private String doctoralGPAScale;
 	@Column(name = "others_address")
-	//@JsonProperty("othersAddress")
 	private String othersAddress;
 	@Column(name = "others_graduate")
-	//@JsonProperty("othersGraduate")
 	private String othersGraduate;
 	@Column(name = "others_degree")
-	//@JsonProperty("othersDegree")
 	private String othersDegree;
 	@Column(name = "others_cos")
-	//@JsonProperty("othersCos")
 	private String othersCos;
 	@Column(name = "others_GPA_scale")
-	//@JsonProperty("othersGPAScale")
 	private String othersGPAScale;
-	@Column(name = "tech_prof")
-	//@JsonProperty("techProf")
+	@Column(name = "tech_prof", length = 500)
 	private String techProf;
 	@Column(name = "ref_fullname")
-	//@JsonProperty("refFullName")
 	private String[] refFullName;
 	@Column(name = "ref_relationship")
-	//@JsonProperty("refRelationship")
 	private String[] refRelationship;
 	@Column(name = "ref_company")
-	//@JsonProperty("refCompany")
 	private String[] refCompany;
 	@Column(name = "ref_phone")
-	//@JsonProperty("ref_Phone")
 	private String[] ref_Phone;
 	@Column(name = "ref_email")
-	//@JsonProperty("refEmail")
 	private String[] refEmail;
 	@Column(name = "ref_address")
-	//@JsonProperty("refAddress")
 	private String[] refAddress;
 	@Column(name = "rel_mili_training_exp")
-	//@JsonProperty("relMiliTrainingExp")
 	private String relMiliTrainingExp;
 	@Column(name = "disclaimer_sign")
-	//@JsonProperty("disclaimerSign")
 	private String disclaimerSign;
 	@Column(name = "name")
-	//@JsonProperty("name")
 	private String name;
 	@Column(name = "signature")
-	//@JsonProperty("signature")
 	private byte[] signature;
 	@Column(name = "date1")
-	//@JsonProperty("date1")
 	private Date date1;
 	private String key;
 	@Column(name = "education")
@@ -245,6 +178,30 @@ public class ApplicationUSEntityMap {
 	private String[] cos;
 	private String[] GPA;
 	private String[] educationalLevel;
+	// Extra fields
+	@Column(name = "deal_id")
+	private String dealId;
+	@Column(name = "field1")
+	private String fieldOne;
+	@Column(name = "field2")
+	private String fieldTwo;
+	@Column(name = "field3")
+	private String fieldThree;
+	@Column(name = "field4")
+	private String fieldFour;
+	@Column(name = "field5")
+	private String fieldFive;
+	@Column(name = "field6")
+	private String fieldSix;
+	@Column(name = "field7")
+	private String fieldSeven;
+	@Column(name = "field8")
+	private String fieldEight;
+	@Column(name = "field9")
+	private String fieldNine;
+	@Column(name = "field10")
+	private String fieldTen;
+
 	public String getAssociateInsName() {
 		return associateInsName;
 	}
@@ -937,9 +894,97 @@ public class ApplicationUSEntityMap {
 		this.date1 = date1;
 	}
 
+	public String getDealId() {
+		return dealId;
+	}
+
+	public void setDealId(String dealId) {
+		this.dealId = dealId;
+	}
+
+	public String getFieldOne() {
+		return fieldOne;
+	}
+
+	public void setFieldOne(String fieldOne) {
+		this.fieldOne = fieldOne;
+	}
+
+	public String getFieldTwo() {
+		return fieldTwo;
+	}
+
+	public void setFieldTwo(String fieldTwo) {
+		this.fieldTwo = fieldTwo;
+	}
+
+	public String getFieldThree() {
+		return fieldThree;
+	}
+
+	public void setFieldThree(String fieldThree) {
+		this.fieldThree = fieldThree;
+	}
+
+	public String getFieldFour() {
+		return fieldFour;
+	}
+
+	public void setFieldFour(String fieldFour) {
+		this.fieldFour = fieldFour;
+	}
+
+	public String getFieldFive() {
+		return fieldFive;
+	}
+
+	public void setFieldFive(String fieldFive) {
+		this.fieldFive = fieldFive;
+	}
+
+	public String getFieldSix() {
+		return fieldSix;
+	}
+
+	public void setFieldSix(String fieldSix) {
+		this.fieldSix = fieldSix;
+	}
+
+	public String getFieldSeven() {
+		return fieldSeven;
+	}
+
+	public void setFieldSeven(String fieldSeven) {
+		this.fieldSeven = fieldSeven;
+	}
+
+	public String getFieldEight() {
+		return fieldEight;
+	}
+
+	public void setFieldEight(String fieldEight) {
+		this.fieldEight = fieldEight;
+	}
+
+	public String getFieldNine() {
+		return fieldNine;
+	}
+
+	public void setFieldNine(String fieldNine) {
+		this.fieldNine = fieldNine;
+	}
+
+	public String getFieldTen() {
+		return fieldTen;
+	}
+
+	public void setFieldTen(String fieldTen) {
+		this.fieldTen = fieldTen;
+	}
+
 	@Override
 	public String toString() {
-		return "USApplicationEntity [emailid=" + emailid + ", appflag=" + appflag + ", resumeStatus=" + resumeStatus
+		return "ApplicationUSEntityMap [emailid=" + emailid + ", appflag=" + appflag + ", resumeStatus=" + resumeStatus
 				+ ", appCompletedDate=" + appCompletedDate + ", streetAddress=" + streetAddress + ", apartmentUnit="
 				+ apartmentUnit + ", state=" + state + ", zipCode=" + zipCode + ", date=" + date + ", dateAvailable="
 				+ dateAvailable + ", currentWorkLocation=" + currentWorkLocation + ", totalExp=" + totalExp
@@ -967,7 +1012,18 @@ public class ApplicationUSEntityMap {
 				+ Arrays.toString(refRelationship) + ", refCompany=" + Arrays.toString(refCompany) + ", ref_Phone="
 				+ Arrays.toString(ref_Phone) + ", refEmail=" + Arrays.toString(refEmail) + ", refAddress="
 				+ Arrays.toString(refAddress) + ", relMiliTrainingExp=" + relMiliTrainingExp + ", disclaimerSign="
-				+ disclaimerSign + ", name=" + name + ", signature=" + signature + ", date1=" + date1 + "]";
+				+ disclaimerSign + ", name=" + name + ", signature=" + Arrays.toString(signature) + ", date1=" + date1
+				+ ", key=" + key + ", education=" + education + ", associateInsName=" + associateInsName
+				+ ", bachelorInsName=" + bachelorInsName + ", masterInsName=" + masterInsName + ", doctoralInsName="
+				+ doctoralInsName + ", otherInsName=" + otherInsName + ", hsInsName=" + hsInsName
+				+ ", educationDetails=" + Arrays.toString(educationDetails) + ", instituteName="
+				+ Arrays.toString(instituteName) + ", insAddress=" + Arrays.toString(insAddress) + ", graduate="
+				+ Arrays.toString(graduate) + ", degree=" + Arrays.toString(degree) + ", cos=" + Arrays.toString(cos)
+				+ ", GPA=" + Arrays.toString(GPA) + ", educationalLevel=" + Arrays.toString(educationalLevel)
+				+ ", dealId=" + dealId + ", fieldOne=" + fieldOne + ", fieldTwo=" + fieldTwo + ", fieldThree="
+				+ fieldThree + ", fieldFour=" + fieldFour + ", fieldFive=" + fieldFive + ", fieldSix=" + fieldSix
+				+ ", fieldSeven=" + fieldSeven + ", fieldEight=" + fieldEight + ", fieldNine=" + fieldNine
+				+ ", fieldTen=" + fieldTen + "]";
 	}
 
 }

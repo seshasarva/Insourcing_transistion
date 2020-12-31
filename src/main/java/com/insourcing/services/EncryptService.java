@@ -29,7 +29,7 @@ public class EncryptService {
 
 	public String decrptPwd(String value, String keys) throws NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-		logger.info("ecrptPwd : Entry");
+		logger.info("decrptPwd : Entry");
 		byte[] cipherData = Base64.getDecoder().decode(value);
 		byte[] saltData = Arrays.copyOfRange(cipherData, 8, 16);
 

@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -48,25 +49,32 @@ public class HRLoginEntity {
 	@Column(name = "account_locked_out_time")
 	private LocalDateTime accountLockedTime;
 
+	@Column(name = "expired_token", length = 500)
+	private String expiredToken;
+
+	@Size(max = 500)
+	@Column(name = "generated_token", length = 500)
+	private String genToken;
+
 	public HRLoginEntity() {
 		super();
 	}
 
-	public HRLoginEntity(String empNo, String empName, String emailId, String password, String country, String role,
-			LocalDateTime lastUpdatedDateTime, boolean isHRLoggedIn, LocalDateTime lastLoginTime,
-			int incorrectLoginAttempt, LocalDateTime accountLockedTime) {
-		super();
-		this.empNo = empNo;
-		this.empName = empName;
-		this.emailId = emailId;
-		this.password = password;
-		this.country = country;
-		this.role = role;
-		this.lastUpdatedDateTime = lastUpdatedDateTime;
-		this.isHRLoggedIn = isHRLoggedIn;
-		this.lastLoginTime = lastLoginTime;
-		this.incorrectLoginAttempt = incorrectLoginAttempt;
-		this.accountLockedTime = accountLockedTime;
+	public String getGenToken() {
+		return genToken;
+	}
+
+	public void setGenToken(String genToken) {
+		this.genToken = genToken;
+	}
+
+
+	public String getExpiredToken() {
+		return expiredToken;
+	}
+
+	public void setExpiredToken(String expiredToken) {
+		this.expiredToken = expiredToken;
 	}
 
 	public String getEmpNo() {
@@ -162,7 +170,8 @@ public class HRLoginEntity {
 		return "HRLoginEntity [empNo=" + empNo + ", empName=" + empName + ", emailId=" + emailId + ", password="
 				+ password + ", country=" + country + ", role=" + role + ", lastUpdatedDateTime=" + lastUpdatedDateTime
 				+ ", isHRLoggedIn=" + isHRLoggedIn + ", lastLoginTime=" + lastLoginTime + ", incorrectLoginAttempt="
-				+ incorrectLoginAttempt + ", accountLockedTime=" + accountLockedTime + "]";
+				+ incorrectLoginAttempt + ", accountLockedTime=" + accountLockedTime + ", expiredToken=" + expiredToken
+				+ ", genToken=" + genToken + "]";
 	}
 
 }

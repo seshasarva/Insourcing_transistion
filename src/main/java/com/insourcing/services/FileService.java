@@ -9,9 +9,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,10 +17,10 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.insourcing.config.CommonConstants;
 import com.insourcing.entity.CandidateEntityMap;
 import com.insourcing.entity.OfferIndiaEntity;
 import com.insourcing.exception.PortalException;
@@ -75,6 +73,7 @@ public class FileService {
 			List<OfferIndiaEntity> offerList = ExcelReader.offerIndiaExcel(excelFile.getInputStream());
 			logger.info(offerList);
 			if (offerList.isEmpty()) {
+				offerMessage = EXCEED_CANDIDATES_COUNT;
 				logger.info(EXCEED_CANDIDATES_COUNT);
 				throw new PortalException(EXCEED_CANDIDATES_COUNT);
 			} else {
@@ -100,15 +99,17 @@ public class FileService {
 								offerMessage = "Offer Generated successfully";
 								logger.info("Offer generated sucessfully for {}", email);
 							} else {
+								offerMessage = "Error in generating PDF";
 								throw new PortalException("Error in generating PDF");
 							}
+						} else {
+							offerMessage = "Please upload India candidate!";
 						}
 					} else {
 						logger.info("Offer already {}", candEntity.getOfferStatus());
 						offerMessage = "Offer already - " + candEntity.getOfferStatus();
 					}
 				}
-
 			}
 		} catch (Exception ex) {
 			offerMessage = "Please try again";
@@ -118,7 +119,8 @@ public class FileService {
 		return offerMessage;
 	}
 
-	public byte[] previewIndiaOffer(OfferIndiaEntity list, MultipartFile templateFile) throws IOException {
+	public byte[] previewIndiaOffer(OfferIndiaEntity list, MultipartFile templateFile)
+			throws IOException, IllegalAccessException {
 		logger.info("previewIndiaOffer - Entry");
 		logger.info("Offer India Entity List {}", list);
 		logger.info(TEMPLATE_FILE, templateFile.getContentType());
@@ -131,46 +133,71 @@ public class FileService {
 		logger.info("Offer India Entity List {}", list);
 		logger.info(TEMPLATE_FILE, templateFile.getContentType());
 		logger.info("previewUSOffer - Exit");
+		if (list.getAddress2() == null) {
+			list.setAddress2("");
+		}
 		return offerLetter(list, templateFile);
 	}
 
 	public String generateUSOfferLetter(MultipartFile excelFile, MultipartFile templateFile)
-			throws IOException, ParseException {
+			throws IOException, ParseException, PortalException {
 		logger.info("generateUSOfferLetter - Entry");
 		logger.info("excel file {}", excelFile.getContentType());
 		logger.info(TEMPLATE_FILE, templateFile.getContentType());
 		List<OfferModel> offerList = ExcelReader.offerUsExcel(excelFile.getInputStream());
-		String offerStatus = null;
+		String offerMessage = null;
 		if (offerList.isEmpty()) {
-			offerStatus = EXCEED_CANDIDATES_COUNT;
+			offerMessage = EXCEED_CANDIDATES_COUNT;
 		} else {
 			for (OfferModel offerModel : offerList) {
 				if (offerModel.getEmailId() == null) {
 					throw new NullPointerException("email id is missing");
 				}
-
-				logger.info(offerModel.toString());
-				byte[] bytes = offerLetter(offerModel, templateFile);
-				uploadFile(bytes, offerModel.getEmailId());
-				offerStatus = "Offer Letter Generated Successfully";
 				CandidateEntityMap candEntity = candRepo.findByEmailid(offerModel.getEmailId());
-				// candEntity = new ModelMapper().map(offerModel, CandidateEntityMap.class);
-				candEntity.setOfferDate(offerModel.getDate());
-				candEntity.setRole(offerModel.getRole());
-				candEntity.setReportingTo(offerModel.getReportingTo());
-				candEntity.setReportAddress(offerModel.getReportingAddress());
-				candEntity.setJoinDate(offerModel.getJoinDate());
-				candEntity.setBase(offerModel.getBase());
-				candEntity.setExemptStatus(offerModel.getExemptionStatus());
-				candEntity.setSeverance(offerModel.getSeverance());
-				candEntity.setBonus(offerModel.getBonus());
-				candRepo.save(candEntity);
+				String address2 = "";
+				if (!offerModel.getAddress2().isEmpty())
+					address2 = offerModel.getAddress2();
+				else
+					address2 = "";
+				if (candEntity.getOfferStatus() == null) {
+					logger.info("candidate details : {}", candEntity);
+					logger.info("country : {}", candEntity.getCountry());
+					if (candEntity.getCountry().equalsIgnoreCase(CommonConstants.COUNTRY_US)) {
+						logger.info("Calling offerLetterUS");
+						logger.info(offerModel.toString());
+						byte[] bytes = offerLetter(offerModel, templateFile);
+						if (null != bytes) {
+							uploadFile(bytes, offerModel.getEmailId());
+							offerMessage = "Offer Letter Generated Successfully";
+						} else {
+							offerMessage = "Error in generating PDF";
+							throw new PortalException("Error in generating PDF");
+						}
+						CandidateEntityMap candEntityOne = candRepo.findByEmailid(offerModel.getEmailId());
+						candEntityOne.setOfferDate(offerModel.getDate());
+						candEntityOne.setRole(offerModel.getRole());
+						candEntityOne.setReportingTo(offerModel.getReportingTo());
+						candEntityOne.setReportAddress(offerModel.getReportingAddress());
+						candEntityOne.setJoinDate(offerModel.getJoinDate());
+						candEntityOne.setBase(offerModel.getBase());
+						candEntityOne.setExemptStatus(offerModel.getExemptionStatus());
+						candEntityOne.setSeverance(offerModel.getSeverance());
+						candEntityOne.setBonus(offerModel.getBonus());
+						candEntityOne.setOfferAddressTwo(address2);
+						candRepo.save(candEntityOne);
+					} else {
+						offerMessage = "Please upload US candidate!";
+					}
+				} else {
+					logger.info("Offer already {}", candEntity.getOfferStatus());
+					offerMessage = "Offer already - " + candEntity.getOfferStatus();
+				}
 			}
 
 		}
-		logger.info(offerStatus);
+		logger.info(offerMessage);
 		logger.info("generateUSOfferLetter - Exit");
-		return offerStatus;
+		return offerMessage;
 	}
 
 	public byte[] previewRetention(RetentionModel list, MultipartFile templateFile) throws IOException, ParseException {
@@ -192,23 +219,28 @@ public class FileService {
 			message = EXCEED_CANDIDATES_COUNT;
 		} else {
 			for (RetentionModel retentionModel : offerList) {
+				CandidateEntityMap candEntityOne = candRepo.findByEmailid(retentionModel.getEmailId());
 				logger.info("Retention Model {}", retentionModel);
 				if (retentionModel.getEmailId() == null) {
 					throw new NullPointerException(EMAIL_ID_MISSING);
 				}
-				byte[] bytes = retentionLetter(retentionModel, templateFile);
-				uploadAppointmentFile(bytes, retentionModel.getEmailId());
-				message = "Successfully Uploaded Retention letter";
-				String emailId = retentionModel.getEmailId();
-				CandidateEntityMap candEntity = candRepo.findByEmailid(emailId);
-				candEntity.setRetDate(retentionModel.getDate());
-				candEntity.setRetBonusQuant(retentionModel.getBonus());
-				if (retentionModel.getBonus() != 0)
-					candEntity.setRetBonus("Yes");
-				else
-					candEntity.setRetBonus("No");
-				candEntity.setWorkState(retentionModel.getWorkState());
-				candRepo.save(candEntity);
+				if (!candEntityOne.isJoinerStatus()) {
+					byte[] bytes = retentionLetter(retentionModel, templateFile);
+					uploadAppointmentFile(bytes, retentionModel.getEmailId());
+					message = "Successfully Uploaded Retention letter";
+					String emailId = retentionModel.getEmailId();
+					CandidateEntityMap candEntity = candRepo.findByEmailid(emailId);
+					candEntity.setRetDate(retentionModel.getDate());
+					candEntity.setRetBonusQuant(retentionModel.getBonus());
+					if (retentionModel.getBonus() != 0)
+						candEntity.setRetBonus("Yes");
+					else
+						candEntity.setRetBonus("No");
+					candEntity.setWorkState(retentionModel.getWorkState());
+					candRepo.save(candEntity);
+				} else {
+					message = "Retention Letter already Generated";
+				}
 			}
 		}
 		return message;
@@ -227,20 +259,28 @@ public class FileService {
 			message = EXCEED_CANDIDATES_COUNT;
 		} else {
 			for (AppointmentModel appointmentModel : offerList) {
+				CandidateEntityMap candEntityOne = candRepo.findByEmailid(appointmentModel.getEmailId());
 				if (appointmentModel.getEmailId() == null) {
 					throw new NullPointerException(EMAIL_ID_MISSING);
 				}
-				byte[] bytes = appointmentLetter(appointmentModel, templateFile);
-				uploadAppointmentFile(bytes, appointmentModel.getEmailId());
+				if (!candEntityOne.isJoinerStatus()) {
+					byte[] bytes = appointmentLetter(appointmentModel, templateFile);
+					uploadAppointmentFile(bytes, appointmentModel.getEmailId());
+
+					message = "Successfully Uploaded Appointment letter";
+				} else {
+					message = "Appointment Letter already Generated";
+				}
 			}
-			message = "Successfully Uploaded Appointment letter";
 		}
 		return message;
 	}
 
-	private byte[] offerLetterIndia(OfferIndiaEntity offerModel, MultipartFile templateFile) throws IOException {
+	private byte[] offerLetterIndia(OfferIndiaEntity offerModel, MultipartFile templateFile)
+			throws IOException, IllegalAccessException {
 		logger.info("offerLetterIndia : Entry");
 		logger.info("offerModel : {}", offerModel.toString());
+		String editedText = "";
 		PDFTextStripper pdfStripper = new PDFTextStripper();
 		PDDocument document = PDDocument.load(templateFile.getBytes());
 		String strJoiningDate = new SimpleDateFormat(indiaDateFormat).format(offerModel.getJoiningDate());
@@ -254,13 +294,12 @@ public class FileService {
 //		
 		String boldText = pdfStripper.getText(document);
 
-		String editedText = boldText.replace("#Title", offerModel.getTitle())
-				.replace("#FirstName", offerModel.getFirstname()).replace("#MiddleName", middleName)
-				.replace("#DateOfOffer", currentDate).replace("#LastName", offerModel.getLastname())
-				.replace("#RefID", offerModel.getRefId()).replace("#Department", offerModel.getDepartment())
-				.replace("#EmailID", offerModel.getEmailId()).replace("#Telephone", offerModel.getTelNo())
-				.replace("#PresentAddress", offerModel.getAdd1()).replace("#City", offerModel.getAdd2())
-				.replace("#StateRegionProvince", offerModel.getAdd3())
+		editedText = boldText.replace("#Title", offerModel.getTitle()).replace("#FirstName", offerModel.getFirstname())
+				.replace("#MiddleName", middleName).replace("#DateOfOffer", currentDate)
+				.replace("#LastName", offerModel.getLastname()).replace("#RefID", offerModel.getRefId())
+				.replace("#Department", offerModel.getDepartment()).replace("#EmailID", offerModel.getEmailId())
+				.replace("#Telephone", offerModel.getTelNo()).replace("#PresentAddress", offerModel.getAdd1())
+				.replace("#City", offerModel.getAdd2()).replace("#StateRegionProvince", offerModel.getAdd3())
 				.replace("#DESIGNATION", offerModel.getDesignation()).replace("#GRADE", offerModel.getGrade())
 				.replace("#POSTINGBRANCH", offerModel.getPostingBranch())
 				.replace("#CANDIDATEROLE", offerModel.getCandRole())
@@ -318,6 +357,7 @@ public class FileService {
 				.replace("#EXGRATIA", offerModel.getExgratia()).replace("\n", "<br>").replace("\r", "<br>");
 		// .replace("\n", "<br>").replace("\r", "<br>");
 		logger.info(editedText);
+
 		document.close();
 		byte[] offerIndiaBytes;
 		offerIndiaBytes = PDFGenerator.offerIndiaPDFGen(offerModel, editedText);
@@ -332,10 +372,22 @@ public class FileService {
 		String strJoiningDate = dateFormat.format(offerModel.getJoinDate());
 		String strResponseDate = dateFormat.format(offerModel.getOfferResponseDate());
 		String strDate = dateFormat.format(offerModel.getDate());
+		String address2;
+		String cityStateZip;
 		logger.info(strJoiningDate);
 		// String strBase = String.valueOf((int) offerModel.getBase());
 		// String strBonus = String.valueOf((int) offerModel.getBonus());
 		// String strSeverance = String.valueOf((int) offerModel.getSeverance());
+
+		if (!offerModel.getAddress2().trim().isEmpty())
+			address2 = "\n" + offerModel.getAddress2();
+		else
+			address2 = "";
+
+		if (!offerModel.getCity().trim().isEmpty())
+			cityStateZip = "\n" + offerModel.getCity();
+		else
+			cityStateZip = "";
 
 		DecimalFormat format = new DecimalFormat("$##,##,###");
 		NumberFormat myFormat = NumberFormat.getInstance();
@@ -343,10 +395,10 @@ public class FileService {
 
 		String editedText = pdfStripper.getText(document).replace("#DATE", strDate)
 				.replace("#Name", offerModel.getFirstName() + " " + offerModel.getLastName())
-				.replace("#Address", offerModel.getAddress()).replace("#City_St_Zip", offerModel.getCity())
-				.replace("#FirstName", offerModel.getFirstName()).replace("#Role", offerModel.getRole())
-				.replace("#RepAdd", offerModel.getReportingAddress()).replace("#JoinDate", strJoiningDate)
-				.replace("#Exempt", offerModel.getExemptionStatus())
+				.replace("#Address", offerModel.getAddress()).replace("#AddTwo", address2)
+				.replace("#City_St_Zip", cityStateZip).replace("#FirstName", offerModel.getFirstName())
+				.replace("#Role", offerModel.getRole()).replace("#ReportingAddres", offerModel.getReportingAddress())
+				.replace("#JoinDate", strJoiningDate).replace("#Exemption", offerModel.getExemptionStatus())
 				.replace("#BaseSal", format.format(Double.valueOf(offerModel.getBase())))
 				.replace("#OfferResDate", strResponseDate).replace("#RepTo", offerModel.getReportingTo())
 				.replace("#Bon", format.format(Double.valueOf(offerModel.getBonus())))
@@ -356,7 +408,7 @@ public class FileService {
 		logger.info(editedText);
 		byte[] offerUSBytes = null;
 		document.close();
-		offerUSBytes = PDFGenerator.offerUSPDFGen(editedText);
+		offerUSBytes = PDFGenerator.offerUSPDFGen(editedText, address2);
 		return offerUSBytes;
 	}
 
@@ -371,7 +423,6 @@ public class FileService {
 		String editedText = pdfStripper.getText(document).replace("#FirstName", retentionModel.getFirstName())
 				.replace("#Name", retentionModel.getFirstName() + " " + retentionModel.getLastName())
 				.replace("#LastName", retentionModel.getLastName()).replace("#Address", retentionModel.getAddress())
-				// .replace("#Address2", retentionModel.getAddress2())
 				.replace("#CityStateZipCode", retentionModel.getCityStateZip())
 				.replace("#Bonus$", format.format(Double.valueOf(retentionModel.getBonus())))
 				.replace("#WorkState", retentionModel.getWorkState()).replace("#TataConsultancyServicesLimited#", " ")
@@ -461,5 +512,4 @@ public class FileService {
 		}
 		candRepo.save(candEntity);
 	}
-
 }

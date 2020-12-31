@@ -21,21 +21,27 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.insourcing.entity.DealEntity;
 import com.insourcing.services.DealsService;
+import com.insourcing.validator.TokenValidator;
 
 @RestController
-@RequestMapping("/deals")
+@RequestMapping("/hrbc/deals")
 public class DealsController {
-
+	private static final String HEADER = "Authorization";
+	private static final String PREFIX = "Bearer ";
 	@Autowired
 	DealsService service;
-
+	@Autowired
+	TokenValidator tokenValidator;
+	@Autowired
+	HttpServletRequest request;
+	
 	@PostMapping("/save")
-	public boolean create(HttpServletRequest request, @RequestBody DealEntity deal) {
+	public boolean create(@RequestBody DealEntity deal) {
 		boolean result = false;
 		try {
 			System.out.println("welcome---" + deal.getMonthOfCreation());
-			String username = (String) request.getAttribute("username");
-			result = service.create(deal, username);
+		
+			result = service.create(deal, getMailId());
 		} catch (Exception e) {
 			System.out.println("Excepttion in create/save :" + e);
 			e.printStackTrace();
@@ -47,14 +53,14 @@ public class DealsController {
 	@GetMapping("/loadDetails")
 	public DealEntity loadDetails(HttpServletRequest request) {
 		System.out.println("in loadDetails----");
-		String username = (String) request.getAttribute("username");
-		return service.loadDetails(username);
+
+		return service.loadDetails(getMailId());
 	}
 
 	@GetMapping("/onLoadFields")
 	public DealEntity onLoadFields(HttpServletRequest request) {
-		String username = (String) request.getAttribute("username");
-		return service.onLoadFields(username);
+		
+		return service.onLoadFields(getMailId());
 	}
 
 	@GetMapping("/fetchAll")
@@ -64,7 +70,7 @@ public class DealsController {
 	
 	@GetMapping("/fetchByDealLead")
 	public List<DealEntity> fetchByDealLead(@RequestParam String lead) {
-		return service.fetchAll();
+		return service.fetchDealLead(lead);
 	}
 
 	@GetMapping("/fetchDeal")
@@ -100,4 +106,9 @@ public class DealsController {
 		return service.download(id);
 	}
 
+	public String getMailId() {
+		String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
+		String emailId = tokenValidator.decodeEmailId(jwtToken);
+		return emailId;
+	}
 }

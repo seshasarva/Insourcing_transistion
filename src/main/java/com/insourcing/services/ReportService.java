@@ -1,7 +1,6 @@
 package com.insourcing.services;
 
 import java.io.ByteArrayInputStream;
-
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,10 +8,20 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.insourcing.entity.*;
-import com.insourcing.helper.*;
-import com.insourcing.model.*;
-import com.insourcing.repository.*;
+import com.insourcing.entity.CandidateEntityMap;
+import com.insourcing.entity.USAFReportEntity;
+import com.insourcing.entity.USEduEmpReportEntity;
+import com.insourcing.helper.ExcelHelper;
+import com.insourcing.model.IndiaReportModel;
+import com.insourcing.model.MySpaceModel;
+import com.insourcing.model.OfferStatus;
+import com.insourcing.model.SkillCount;
+import com.insourcing.repository.ApplicationIndiaRepo;
+import com.insourcing.repository.ApplicationUSRepo;
+import com.insourcing.repository.CandidateRepo;
+import com.insourcing.repository.OfferIndiaRepo;
+import com.insourcing.repository.USAFReportRepo;
+import com.insourcing.repository.USEduEmpReportRepo;
 
 @SuppressWarnings({"unused" })
 @Service
@@ -112,9 +121,9 @@ public class ReportService {
 		long offerAccept = 0;
 		long offerAcceptRatio = 0;
 		long skillCount = 0;
-		List<CandidateEntity> candEntity = candRepo.findByIndia();
+		List<CandidateEntityMap> candEntity = candRepo.findByIndia();
 
-		for(CandidateEntity c: candEntity) {
+		for (CandidateEntityMap c : candEntity) {
 			headCount = headCount+1;
 			if(c.getOfferFile() != null)
 				offerCount = offerCount+1;

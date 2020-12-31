@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.insourcing.entity.CandidateEntity;
 import com.insourcing.entity.CandidateEntityMap;
 import com.insourcing.model.ExcelModel;
 import com.insourcing.model.SkillCount;
@@ -32,7 +31,7 @@ public interface CandidateRepo extends JpaRepository<CandidateEntityMap, Object>
 	public List<CandidateEntityMap> findAll();
 
 	@Query("select a from CandidateEntityMap a where a.country = 'India'")
-	public List<CandidateEntity> findByIndia();
+	public List<CandidateEntityMap> findByIndia();
 
 	@Query("select new com.insourcing.model.SkillCount(a.skills as Skills, count(*) as Count) from CandidateEntityMap a where a.country = 'US' group by a.skills")
 	public List<SkillCount> countByUSSkills();

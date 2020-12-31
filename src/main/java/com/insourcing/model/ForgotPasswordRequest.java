@@ -4,6 +4,7 @@ public class ForgotPasswordRequest {
 
 	String emailId;
 	String newPassword;
+	String currentPassword;
 
 	public ForgotPasswordRequest() {
 		super();
@@ -29,6 +30,20 @@ public class ForgotPasswordRequest {
 
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
+	}
+
+	public String getCurrentPassword() {
+		return currentPassword;
+	}
+
+	public void setCurrentPassword(String currentPassword) {
+		this.currentPassword = currentPassword;
+	}
+
+	@Override
+	public String toString() {
+		return "ForgotPasswordRequest [emailId=" + emailId + ", newPassword=" + newPassword + ", currentPassword="
+				+ currentPassword + "]";
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.insourcing.model;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class LoginFormResponse {
@@ -9,9 +8,7 @@ public class LoginFormResponse {
 	private String middlename;
 	private String lastname;
 	private String emailid;
-	private String contactno;
 	private String country;
-	private String notice;
 	private String currentTitle;
 	private boolean regflag;
 	private String refId;
@@ -23,38 +20,109 @@ public class LoginFormResponse {
 	private Enum<?> authenticationCode;
 	private int incorrectLoginAttempt;
 	private boolean isCandidateLoggedIn;
-	private LocalDateTime lastLoginDateTime;
-	private Long loginTimeDifference;
+
+	private String dealId;
+	private String flowSeqOne;
+	private String flowSeqTwo;
+	private String flowSeqThree;
+	private String flowSeqFour;
+	private String flowSeqFive;
+	private String flowSeqSix;
+	private String flowSeqSeven;
+	private String flowSeqEight;
+	private String flowSeqNine;
+	private String flowSeqTen;
 
 	public LoginFormResponse() {
 		super();
 	}
 
-	public LoginFormResponse(String firstname, String middlename, String lastname, String emailid, String contactno,
-			String country, String notice, String currentTitle, boolean regflag, String refId, boolean appflag,
-			String offerStatus, byte[] joiningLetter, String jwtToken, Enum<?> authenticationCode,
-			int incorrectLoginAttempt, boolean isCandidateLoggedIn, LocalDateTime lastLoginDateTime,
-			Long loginTimeDifference) {
-		super();
-		this.firstname = firstname;
-		this.middlename = middlename;
-		this.lastname = lastname;
-		this.emailid = emailid;
-		this.contactno = contactno;
-		this.country = country;
-		this.notice = notice;
-		this.currentTitle = currentTitle;
-		this.regflag = regflag;
-		this.refId = refId;
-		this.appflag = appflag;
-		this.offerStatus = offerStatus;
-		this.joiningLetter = joiningLetter;
-		this.jwtToken = jwtToken;
-		this.authenticationCode = authenticationCode;
-		this.incorrectLoginAttempt = incorrectLoginAttempt;
-		this.isCandidateLoggedIn = isCandidateLoggedIn;
-		this.lastLoginDateTime = lastLoginDateTime;
-		this.loginTimeDifference = loginTimeDifference;
+	public String getDealId() {
+		return dealId;
+	}
+
+	public void setDealId(String dealId) {
+		this.dealId = dealId;
+	}
+
+	public String getFlowSeqOne() {
+		return flowSeqOne;
+	}
+
+	public void setFlowSeqOne(String flowSeqOne) {
+		this.flowSeqOne = flowSeqOne;
+	}
+
+	public String getFlowSeqTwo() {
+		return flowSeqTwo;
+	}
+
+	public void setFlowSeqTwo(String flowSeqTwo) {
+		this.flowSeqTwo = flowSeqTwo;
+	}
+
+	public String getFlowSeqThree() {
+		return flowSeqThree;
+	}
+
+	public void setFlowSeqThree(String flowSeqThree) {
+		this.flowSeqThree = flowSeqThree;
+	}
+
+	public String getFlowSeqFour() {
+		return flowSeqFour;
+	}
+
+	public void setFlowSeqFour(String flowSeqFour) {
+		this.flowSeqFour = flowSeqFour;
+	}
+
+	public String getFlowSeqFive() {
+		return flowSeqFive;
+	}
+
+	public void setFlowSeqFive(String flowSeqFive) {
+		this.flowSeqFive = flowSeqFive;
+	}
+
+	public String getFlowSeqSix() {
+		return flowSeqSix;
+	}
+
+	public void setFlowSeqSix(String flowSeqSix) {
+		this.flowSeqSix = flowSeqSix;
+	}
+
+	public String getFlowSeqSeven() {
+		return flowSeqSeven;
+	}
+
+	public void setFlowSeqSeven(String flowSeqSeven) {
+		this.flowSeqSeven = flowSeqSeven;
+	}
+
+	public String getFlowSeqEight() {
+		return flowSeqEight;
+	}
+
+	public void setFlowSeqEight(String flowSeqEight) {
+		this.flowSeqEight = flowSeqEight;
+	}
+
+	public String getFlowSeqNine() {
+		return flowSeqNine;
+	}
+
+	public void setFlowSeqNine(String flowSeqNine) {
+		this.flowSeqNine = flowSeqNine;
+	}
+
+	public String getFlowSeqTen() {
+		return flowSeqTen;
+	}
+
+	public void setFlowSeqTen(String flowSeqTen) {
+		this.flowSeqTen = flowSeqTen;
 	}
 
 	public String getFirstname() {
@@ -89,28 +157,12 @@ public class LoginFormResponse {
 		this.emailid = emailid;
 	}
 
-	public String getContactno() {
-		return contactno;
-	}
-
-	public void setContactno(String contactno) {
-		this.contactno = contactno;
-	}
-
 	public String getCountry() {
 		return country;
 	}
 
 	public void setCountry(String country) {
 		this.country = country;
-	}
-
-	public String getNotice() {
-		return notice;
-	}
-
-	public void setNotice(String notice) {
-		this.notice = notice;
 	}
 
 	public String getCurrentTitle() {
@@ -193,30 +245,18 @@ public class LoginFormResponse {
 		this.isCandidateLoggedIn = isCandidateLoggedIn;
 	}
 
-	public LocalDateTime getLastLoginDateTime() {
-		return lastLoginDateTime;
-	}
-
-	public void setLastLoginDateTime(LocalDateTime lastLoginDateTime) {
-		this.lastLoginDateTime = lastLoginDateTime;
-	}
-
-	public Long getLoginTimeDifference() {
-		return loginTimeDifference;
-	}
-
-	public void setLoginTimeDifference(Long loginTimeDifference) {
-		this.loginTimeDifference = loginTimeDifference;
-	}
-
 	@Override
 	public String toString() {
 		return "LoginFormResponse [firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname
-				+ ", emailid=" + emailid + ", contactno=" + contactno + ", country=" + country + ", notice=" + notice
-				+ ", currentTitle=" + currentTitle + ", regflag=" + regflag + ", refId=" + refId + ", appflag="
-				+ appflag + ", offerStatus=" + offerStatus + ", joiningLetter=" + Arrays.toString(joiningLetter)
-				+ ", jwtToken=" + jwtToken + ", authenticationCode=" + authenticationCode + ", incorrectLoginAttempt="
-				+ incorrectLoginAttempt + ", isCandidateLoggedIn=" + isCandidateLoggedIn + ", lastLoginDateTime="
-				+ lastLoginDateTime + ", loginTimeDifference=" + loginTimeDifference + "]";
+				+ ", emailid=" + emailid + ", country=" + country + ", currentTitle=" + currentTitle + ", regflag="
+				+ regflag + ", refId=" + refId + ", appflag=" + appflag + ", offerStatus=" + offerStatus
+				+ ", joiningLetter=" + Arrays.toString(joiningLetter) + ", jwtToken=" + jwtToken
+				+ ", authenticationCode=" + authenticationCode + ", incorrectLoginAttempt=" + incorrectLoginAttempt
+				+ ", isCandidateLoggedIn=" + isCandidateLoggedIn + ", dealId=" + dealId + ", flowSeqOne=" + flowSeqOne
+				+ ", flowSeqTwo=" + flowSeqTwo + ", flowSeqThree=" + flowSeqThree + ", flowSeqFour=" + flowSeqFour
+				+ ", flowSeqFive=" + flowSeqFive + ", flowSeqSix=" + flowSeqSix + ", flowSeqSeven=" + flowSeqSeven
+				+ ", flowSeqEight=" + flowSeqEight + ", flowSeqNine=" + flowSeqNine + ", flowSeqTen=" + flowSeqTen
+				+ "]";
 	}
+
 }

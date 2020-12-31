@@ -1,7 +1,6 @@
 package com.insourcing.helper;
 
 import java.awt.Color;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -109,8 +108,23 @@ public class PDFGenerator {
 			PDPageContentStream cosNineteen = new PDPageContentStream(doc, pageTwenty);
 			PDPageContentStream cosTwenty = new PDPageContentStream(doc, pageTwentyOne);
 			cos = new PDPageContentStream(doc, pageOne);
-			PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/image.jpg", doc);
-			PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/footer_india.PNG", doc);
+
+			// ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			// logger.info("Class Loader path::::" +
+			// classLoader.getResource("images/image.jpg").getPath());
+			/// String pathImage = classLoader.getResource("images/image.jpg").getPath();
+			// String pathFooter =
+			// classLoader.getResource("images/footer_india.png").getPath();
+			// String path =
+			// classLoader.getResource("images/signature-india.jpg").getPath();
+
+			// PDImageXObject pdImage =
+			// PDImageXObject.createFromFile(pathImage.replaceAll("%20", " "), doc);
+			// PDImageXObject pdFooterImage =
+			// PDImageXObject.createFromFile(pathFooter.replaceAll("%20", " "), doc);
+			PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/images/image.jpg", doc);
+			PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/images/footer_india.PNG",
+					doc);
 			cos.drawXObject(pdImage, 260, 750, 70, 70);
 			cos.drawXObject(pdFooterImage, 150, 0, 300, 75);
 			cosOne.drawXObject(pdImage, 255, 750, 70, 70);
@@ -153,7 +167,12 @@ public class PDFGenerator {
 			cosNineteen.drawXObject(pdFooterImage, 150, 0, 300, 75);
 			cosTwenty.drawXObject(pdImage, 255, 750, 70, 70);
 			cosTwenty.drawXObject(pdFooterImage, 150, 0, 300, 75);
-			PDImageXObject signatureIndia = PDImageXObject.createFromFile("src/main/resources/signature-india.JPG",
+
+			// PDImageXObject signatureIndia =
+			// PDImageXObject.createFromFile(path.replaceAll("%20", " "),
+			// doc);
+			PDImageXObject signatureIndia = PDImageXObject.createFromFile(
+					"src/main/resources/images/signature-india.JPG",
 					doc);
 			cosEight.drawXObject(signatureIndia, 70, 455, 65, 65);
 			cos.beginText();
@@ -280,22 +299,6 @@ public class PDFGenerator {
 			cosEight.newLineAtOffset(15, 55);
 			cosEight.showText("TCSL/" + offerModel.getRefId());
 			cosEight.endText();
-			// cosNine.drawXObject(pdImage, 250, 750, 70, 70);
-			// cosNine.drawXObject(pdFooterImage, 180, 0, 240, 75);
-			// cosNine.beginText();
-			// cosNine.setFont(PDType1Font.HELVETICA, 10);
-			// cosNine.setStrokingColor(Color.GRAY);
-			// cosNine.newLineAtOffset(15, 65);
-			// cosNine.showText("Private and Confidential");
-			// cosNine.endText();
-			// cosNine.beginText();
-			// cosNine.setFont(PDType1Font.HELVETICA, 10);
-			// cosNine.setStrokingColor(Color.GRAY);
-			// cosNine.newLineAtOffset(15, 55);
-			// cosNine.showText("TCSL/" + offerModel.getRefId());
-			// cosNine.endText();
-			// cosOne0.drawXObject(pdImage, 245, 750, 75, 75);
-			// cosOne0.drawXObject(pdFooterImage, 220, 0, 120, 75);
 			cosEleven.drawXObject(pdImage, 250, 750, 70, 70);
 			cosEleven.drawXObject(pdFooterImage, 180, 0, 240, 75);
 			cosEleven.beginText();
@@ -470,14 +473,6 @@ public class PDFGenerator {
 			// cosEight.setFont(pdfFont, fontSize);
 			cosEight.newLineAtOffset(startX, startY);
 			cosEight.moveTextPositionByAmount(10, -65);
-			// cosNine.beginText();
-			// cosNine.setFont(pdfFont, fontSize);
-			// cosNine.newLineAtOffset(startX, startY);
-			// cosNine.moveTextPositionByAmount(10, -65);
-			// cosOne0.beginText();
-			// cosOne0.setFont(pdfFont, fontSize);
-			// cosOne0.newLineAtOffset(startX, startY);
-			// cosOne0.moveTextPositionByAmount(10, -50);
 			cosEleven.beginText();
 			cosEleven.newLineAtOffset(startX, startY);
 			cosEleven.moveTextPositionByAmount(10, -70);
@@ -1125,6 +1120,9 @@ public class PDFGenerator {
 
 			compensationTable.draw();
 			PDFont fontNormal = PDType1Font.HELVETICA;
+			// logger.info("Class Loader path::::" +
+			// classLoader.getResource("font/Verdana.ttf").getPath());
+			// String font = classLoader.getResource("font/Verdana.ttf").getPath();
 			PDFont fontVerdana = PDTrueTypeFont.loadTTF(doc, new File("src/main/resources/font/Verdana.ttf"));
 			Color greyColor = TableHelper.getColorForValue(500, 1000, false, 100, 1000, Color.lightGray, Color.white);
 			String titleName = "Document Submission - Annexure 2";
@@ -1565,7 +1563,7 @@ public class PDFGenerator {
 		return byteArrayOutputStream.toByteArray();
 	}
 
-	public static byte[] offerUSPDFGen(String editedText) throws IOException {
+	public static byte[] offerUSPDFGen(String editedText, String address2) throws IOException {
 		PDDocument doc = new PDDocument();
 		PDPage pageOne = new PDPage(PDRectangle.A4);
 		doc.addPage(pageOne);
@@ -1594,18 +1592,40 @@ public class PDFGenerator {
 		PDPageContentStream cosThree = new PDPageContentStream(doc, pageFour);
 		// PDPageContentStream cosFour = new PDPageContentStream(doc, pageFour);
 		cos = new PDPageContentStream(doc, pageOne);
-		PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/image.jpg", doc);
-		PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/footer_us.PNG", doc);
+
+		// ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		// logger.info("Class Loader path::::" +
+		// classLoader.getResource("images/image.jpg").getPath());
+		// String pathImage = classLoader.getResource("images/image.jpg").getPath();
+		// String pathFooter =
+		// classLoader.getResource("images/footer_us.PNG").getPath();
+		// String pathSignature =
+		// classLoader.getResource("images/signature-us.png").getPath();
+
+		// PDImageXObject pdImage =
+		// PDImageXObject.createFromFile(pathImage.replaceAll("%20", " "), doc);
+
+		// PDImageXObject pdFooterImage =
+		// PDImageXObject.createFromFile(pathFooter.replaceAll("%20", " "), doc);
+		PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/images/image.jpg", doc);
+		PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/images/footer_us.PNG", doc);
 		cos.drawXObject(pdImage, 245, 750, 70, 70);
-		cos.drawXObject(pdFooterImage, 220, -5, 120, 75);
+		cos.drawXObject(pdFooterImage, 220, 5, 120, 75);
 		cosOne.drawXObject(pdImage, 245, 750, 70, 70);
-		cosOne.drawXObject(pdFooterImage, 220, -5, 120, 75);
+		cosOne.drawXObject(pdFooterImage, 220, 5, 120, 75);
 		cosTwo.drawXObject(pdImage, 245, 750, 70, 70);
-		cosTwo.drawXObject(pdFooterImage, 220, -5, 120, 75);
+		cosTwo.drawXObject(pdFooterImage, 220, 5, 120, 75);
 		cosThree.drawXObject(pdImage, 245, 750, 70, 70);
-		cosThree.drawXObject(pdFooterImage, 220, -5, 120, 75);
-		PDImageXObject signatureUS = PDImageXObject.createFromFile("src/main/resources/signature-us.png", doc);
-		cosThree.drawXObject(signatureUS, 50, 240, 85, 85);
+		cosThree.drawXObject(pdFooterImage, 220, 5, 120, 75);
+		PDImageXObject signatureUS = PDImageXObject.createFromFile("src/main/resources/images/signature-us.png", doc);
+		// PDImageXObject signatureUS =
+		// PDImageXObject.createFromFile(pathSignature.replaceAll("%20", " "), doc);
+		logger.info("Us Signature");
+		if (!address2.trim().isEmpty())
+			cosThree.drawXObject(signatureUS, 50, 310, 85, 85);
+		else
+			cosThree.drawXObject(signatureUS, 50, 325, 85, 85);
+		logger.info("Us Signature1");
 		cos.beginText();
 		// cos.setFont(pdfFont, fontSize);
 		cos.newLineAtOffset(startX, startY);
@@ -1658,7 +1678,7 @@ public class PDFGenerator {
 				lineCount = lineCount + 1;
 				logger.info("lineCount: " + lineCount);
 				float charSpacing = 0;
-				if (line.length() > 82) {
+				if (line.length() > 78) {
 					float size = fontSize * pdfFont.getStringWidth(line) / 1000;
 					float free = width - size;
 					if (free > 0) {
@@ -1666,7 +1686,7 @@ public class PDFGenerator {
 					}
 				}
 
-				if (lineCount >= 43 && lineCount <= 83) {
+				if (lineCount >= 42 && lineCount <= 81) {
 					logger.info("Line 43");
 					// if(lineCount == 50 )
 					if (line.startsWith("<b>")) {
@@ -1680,7 +1700,7 @@ public class PDFGenerator {
 						cosOne.showText(line);
 						cosOne.newLineAtOffset(0, -leading);
 					}
-				} else if (lineCount >= 83 && lineCount <= 124) {
+				} else if (lineCount >= 81 && lineCount <= 121) {
 					logger.info("Line 86");
 					if (line.startsWith("<b>")) {
 						cosTwo.setFont(pdfFontBold, fontSize);
@@ -1693,7 +1713,7 @@ public class PDFGenerator {
 						cosTwo.showText(line);
 						cosTwo.newLineAtOffset(0, -leading);
 					}
-				} else if (lineCount >= 124) {
+				} else if (lineCount >= 121) {
 					logger.info("Line 125");
 					if (line.startsWith("<b>")) {
 						cosThree.setFont(pdfFontBold, fontSize);
@@ -1768,14 +1788,27 @@ public class PDFGenerator {
 		doc.addPage(pageThree);
 		PDPageContentStream cosTwo = new PDPageContentStream(doc, pageThree);
 		cos = new PDPageContentStream(doc, pageOne);
-		PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/image.jpg", doc);
-		PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/footer_us.PNG", doc);
+
+		// ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		// logger.info("Class Loader path::::" +
+		// classLoader.getResource("images/image.jpg").getPath());
+		// String pathImage = classLoader.getResource("images/image.jpg").getPath();
+		// String pathFooter =
+		// classLoader.getResource("images/footer_us.PNG").getPath();
+
+		// PDImageXObject pdImage =
+		// PDImageXObject.createFromFile(pathImage.replaceAll("%20", " "), doc);
+
+		// PDImageXObject pdFooterImage =
+		// PDImageXObject.createFromFile(pathFooter.replaceAll("%20", " "), doc);
+		PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/images/image.jpg", doc);
+		PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/images/footer_us.PNG", doc);
 		cos.drawXObject(pdImage, 250, 750, 75, 75);
-		cos.drawXObject(pdFooterImage, 210, 0, 160, 65);
+		cos.drawXObject(pdFooterImage, 210, 10, 160, 65);
 		cosOne.drawXObject(pdImage, 250, 750, 75, 75);
-		cosOne.drawXObject(pdFooterImage, 210, 0, 160, 65);
+		cosOne.drawXObject(pdFooterImage, 210, 10, 160, 65);
 		cosTwo.drawXObject(pdImage, 250, 750, 75, 75);
-		cosTwo.drawXObject(pdFooterImage, 210, 0, 160, 65);
+		cosTwo.drawXObject(pdFooterImage, 210, 10, 160, 65);
 		cos.beginText();
 		// cos.setFont(pdfFont, fontSize);
 		cos.newLineAtOffset(startX, startY);
@@ -1833,7 +1866,7 @@ public class PDFGenerator {
 						charSpacing = free / (line.length() - 1);
 					}
 				}
-				if (lineCount >= 43 && lineCount <= 83) {
+				if (lineCount >= 39 && lineCount <= 77) {
 					logger.info("Line 43");
 					// page = new PDPage();
 					// doc.addPage(page);
@@ -1848,7 +1881,7 @@ public class PDFGenerator {
 						cosOne.showText(line);
 						cosOne.newLineAtOffset(0, -leading);
 					}
-				} else if (lineCount >= 83) {
+				} else if (lineCount >= 77) {
 					logger.info("Line 86");
 					// page = new PDPage();
 					// doc.addPage(page);
@@ -1911,11 +1944,28 @@ public class PDFGenerator {
 		float startX = mediabox.getLowerLeftX() + margin;
 		float startY = mediabox.getUpperRightY() - margin;
 		cos = new PDPageContentStream(doc, pageOne);
-		PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/image.jpg", doc);
-		PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/footer_india.PNG", doc);
+
+		// ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		// logger.info("Class Loader path::::" +
+		// classLoader.getResource("images/image.jpg").getPath());
+		// String pathImage = classLoader.getResource("images/image.jpg").getPath();
+		// String pathFooter =
+		// classLoader.getResource("images/footer_india.png").getPath();
+		// String pathSignature =
+		// classLoader.getResource("images/signature-india.jpg").getPath();
+
+		// PDImageXObject pdImage =
+		// PDImageXObject.createFromFile(pathImage.replaceAll("%20", " "), doc);
+		// PDImageXObject pdFooterImage =
+		// PDImageXObject.createFromFile(pathFooter.replaceAll("%20", " "), doc);
+		PDImageXObject pdImage = PDImageXObject.createFromFile("src/main/resources/images/image.jpg", doc);
+		PDImageXObject pdFooterImage = PDImageXObject.createFromFile("src/main/resources/images/footer_india.PNG", doc);
 		cos.drawXObject(pdImage, 245, 750, 75, 75);
 		cos.drawXObject(pdFooterImage, 200, 0, 240, 75);
-		PDImageXObject signatureIndia = PDImageXObject.createFromFile("src/main/resources/signature-india.JPG", doc);
+		// PDImageXObject signatureIndia =
+		// PDImageXObject.createFromFile(pathSignature.replaceAll("%20", " "), doc);
+		PDImageXObject signatureIndia = PDImageXObject.createFromFile("src/main/resources/images/signature-india.JPG",
+				doc);
 		cos.drawXObject(signatureIndia, 70, 280, 65, 65);
 		cos.beginText();
 		// cos.setFont(pdfFont, fontSize);

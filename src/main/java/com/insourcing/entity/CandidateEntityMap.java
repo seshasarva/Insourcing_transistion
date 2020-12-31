@@ -2,7 +2,6 @@ package com.insourcing.entity;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -79,6 +78,8 @@ public class CandidateEntityMap {
 	private String reportingTo;
 	@Column(name = "reporting_address")
 	private String reportAddress;
+	@Column(name = "offer_address_two")
+	private String offerAddressTwo;
 	@Column(name = "joining_date")
 	private Date joinDate;
 	@Column(name = "exemption_status")
@@ -107,73 +108,50 @@ public class CandidateEntityMap {
 	private Date date;
 	@Column(name = "last_login_date_time")
 	private LocalDateTime lastLoginTime;
-	
 	@Column(name = "account_locked_out_time")
 	private LocalDateTime accountLockedTime;
-	@Column(name = "deal_id")
+	@Column(name = "expired_token", length = 500)
+	private String expiredToken;
+	@Column(name = "generated_token", length = 500)
+	private String genToken;
+	@Column(name = "dealId")
 	private String dealId;
+
 	public CandidateEntityMap() {
 		super();
 	}
 
-	public CandidateEntityMap(String firstname, String middlename, String lastname, String emailid, String contactno,
-			String city, String country, String privacyNotice, String password, boolean isFirstTimeLogin,
-			boolean isCandidateLoggedIn, int incorrectLoginAttempt, int id, String username, String skills,
-			String currentTitle, Date dob, String currentLocation, boolean regflag, String refId, byte[] offerFile,
-			boolean appflag, Date offerGenDate, Date regCompletedDate, Date retDate, String retBonus,
-			double retBonusQuant, String workState, Date offerDate, String role, String reportingTo,
-			String reportAddress, Date joinDate, String exemptStatus, Date offerRelDate, String offerStatus,
-			Date offerAcceptDate, double base, double bonus, double severance, byte[] joiningLetter,
-			Date joiningLetterDate, boolean joinerStatus, String key, Date date, LocalDateTime lastLoginTime,
-			LocalDateTime accountLockedTime) {
-		super();
-		this.firstname = firstname;
-		this.middlename = middlename;
-		this.lastname = lastname;
-		this.emailid = emailid;
-		this.contactno = contactno;
-		this.city = city;
-		this.country = country;
-		this.privacyNotice = privacyNotice;
-		this.password = password;
-		this.isFirstTimeLogin = isFirstTimeLogin;
-		this.isCandidateLoggedIn = isCandidateLoggedIn;
-		this.incorrectLoginAttempt = incorrectLoginAttempt;
-		this.id = id;
-		this.username = username;
-		this.skills = skills;
-		this.currentTitle = currentTitle;
-		this.dob = dob;
-		this.currentLocation = currentLocation;
-		this.regflag = regflag;
-		this.refId = refId;
-		this.offerFile = offerFile;
-		this.appflag = appflag;
-		this.offerGenDate = offerGenDate;
-		this.regCompletedDate = regCompletedDate;
-		this.retDate = retDate;
-		this.retBonus = retBonus;
-		this.retBonusQuant = retBonusQuant;
-		this.workState = workState;
-		this.offerDate = offerDate;
-		this.role = role;
-		this.reportingTo = reportingTo;
-		this.reportAddress = reportAddress;
-		this.joinDate = joinDate;
-		this.exemptStatus = exemptStatus;
-		this.offerRelDate = offerRelDate;
-		this.offerStatus = offerStatus;
-		this.offerAcceptDate = offerAcceptDate;
-		this.base = base;
-		this.bonus = bonus;
-		this.severance = severance;
-		this.joiningLetter = joiningLetter;
-		this.joiningLetterDate = joiningLetterDate;
-		this.joinerStatus = joinerStatus;
-		this.key = key;
-		this.date = date;
-		this.lastLoginTime = lastLoginTime;
-		this.accountLockedTime = accountLockedTime;
+	public String getDealId() {
+		return dealId;
+	}
+
+	public void setDealId(String dealId) {
+		this.dealId = dealId;
+	}
+
+	public String getOfferAddressTwo() {
+		return offerAddressTwo;
+	}
+
+	public void setOfferAddressTwo(String offerAddressTwo) {
+		this.offerAddressTwo = offerAddressTwo;
+	}
+
+	public String getGenToken() {
+		return genToken;
+	}
+
+	public void setGenToken(String genToken) {
+		this.genToken = genToken;
+	}
+
+
+	public String getExpiredToken() {
+		return expiredToken;
+	}
+
+	public void setExpiredToken(String expiredToken) {
+		this.expiredToken = expiredToken;
 	}
 
 	public String getFirstname() {
@@ -552,14 +530,6 @@ public class CandidateEntityMap {
 		this.accountLockedTime = accountLockedTime;
 	}
 
-	public String getDealId() {
-		return dealId;
-	}
-
-	public void setDealId(String dealId) {
-		this.dealId = dealId;
-	}
-
 	@Override
 	public String toString() {
 		return "CandidateEntityMap [firstname=" + firstname + ", middlename=" + middlename + ", lastname=" + lastname
@@ -572,12 +542,13 @@ public class CandidateEntityMap {
 				+ ", appflag=" + appflag + ", offerGenDate=" + offerGenDate + ", regCompletedDate=" + regCompletedDate
 				+ ", retDate=" + retDate + ", retBonus=" + retBonus + ", retBonusQuant=" + retBonusQuant
 				+ ", workState=" + workState + ", offerDate=" + offerDate + ", role=" + role + ", reportingTo="
-				+ reportingTo + ", reportAddress=" + reportAddress + ", joinDate=" + joinDate + ", exemptStatus="
-				+ exemptStatus + ", offerRelDate=" + offerRelDate + ", offerStatus=" + offerStatus
-				+ ", offerAcceptDate=" + offerAcceptDate + ", base=" + base + ", bonus=" + bonus + ", severance="
-				+ severance + ", joiningLetter=" + Arrays.toString(joiningLetter) + ", joiningLetterDate="
-				+ joiningLetterDate + ", joinerStatus=" + joinerStatus + ", key=" + key + ", date=" + date
-				+ ", lastLoginTime=" + lastLoginTime + ", accountLockedTime=" + accountLockedTime + "]";
+				+ reportingTo + ", reportAddress=" + reportAddress + ", offerAddressTwo=" + offerAddressTwo
+				+ ", joinDate=" + joinDate + ", exemptStatus=" + exemptStatus + ", offerRelDate=" + offerRelDate
+				+ ", offerStatus=" + offerStatus + ", offerAcceptDate=" + offerAcceptDate + ", base=" + base
+				+ ", bonus=" + bonus + ", severance=" + severance + ", joiningLetter=" + Arrays.toString(joiningLetter)
+				+ ", joiningLetterDate=" + joiningLetterDate + ", joinerStatus=" + joinerStatus + ", key=" + key
+				+ ", date=" + date + ", lastLoginTime=" + lastLoginTime + ", accountLockedTime=" + accountLockedTime
+				+ ", expiredToken=" + expiredToken + ", genToken=" + genToken + ", dealId=" + dealId + "]";
 	}
 	
 }
