@@ -1,9 +1,14 @@
 package com.insourcing.services;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.transaction.Transactional;
 
@@ -37,6 +42,7 @@ import com.insourcing.entity.RecruiterProfileEntity;
 import com.insourcing.repository.CRFRepo;
 import com.insourcing.repository.CandidateRepo;
 import com.insourcing.repository.ContactUsRepo;
+import com.insourcing.repository.DealCounterRepo;
 import com.insourcing.repository.DealsRepo;
 import com.insourcing.repository.ExploreTcsRepo;
 import com.insourcing.repository.InterviewScheduleRepo;
@@ -45,7 +51,7 @@ import com.insourcing.repository.RecruiterProfileRepo;
 
 @Service
 public class TransistionService {
-	
+	static Properties prop;
 	@Autowired
 	DealsRepo repo;
 	@Autowired
@@ -294,14 +300,12 @@ public class TransistionService {
 		if(null != deal && deal.isPresent()) {
 			entity = deal.get();
 		}else {
-			entity = defaultCrfJson();
+			entity = defaultCrfJson(id);
 			entity.setId(id);
 		}
 		switch (field) {
-		case "euStatusManagement": entity.setEuStatusManagement(json);break;
-		case "noneuStatusManagement":entity.setNoneuStatusManagement(json);break;
-		case "euApplicationForm":entity.setEuApplicationForm(json);break;
-		case "noneuApplicationForm":entity.setNoneuApplicationForm(json);break;
+		case "statusManagement": entity.setStatusManagement(json);;break;
+		case "applicationForm":entity.setApplicationForm(json);break;
 		}
 		crfRepo.save(entity);
 		return true;
@@ -313,7 +317,7 @@ public class TransistionService {
 			CRFEntity crf = deal.get();
 			return crf;
 		}else {
-			return defaultCrfJson();
+			return defaultCrfJson(id);
 		}
 	}
 	
@@ -412,18 +416,25 @@ public class TransistionService {
 
 	}
 	
-	public CRFEntity defaultCrfJson() throws JsonMappingException, JsonProcessingException {
+	public CRFEntity defaultCrfJson(String id) throws JsonMappingException, JsonProcessingException {
+		Optional<DealEntity> dealOpt = repo.findById(id);
+		if(null == dealOpt || !dealOpt.isPresent()) return null;
+		DealEntity deal = repo.findById(id).get();
+		
 		CRFEntity crfEntity = new CRFEntity();
 		ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode euStatusMangement = objectMapper.createObjectNode();
 		ObjectNode euApplForm = objectMapper.createObjectNode();
 		ObjectNode noneuStatusMaangement = objectMapper.createObjectNode();
 		ObjectNode noneuApplForm = objectMapper.createObjectNode();
-		crfEntity.setEuApplicationForm(updateApplForm());
+		
+		crfEntity.setApplicationForm(prop.getProperty(deal.getGeographyWithInScope()));
+		crfEntity.setStatusManagement(DEFAULT_JSON);
+		/*crfEntity.setEuApplicationForm(updateApplForm());
 		crfEntity.setEuStatusManagement(updatePref(euStatusMangement));
 		crfEntity.setNoneuApplicationForm(updateApplForm());
-		crfEntity.setNoneuStatusManagement(updatePref(noneuStatusMaangement));
-		crfEntity.setId("deal1");
+		crfEntity.setNoneuStatusManagement(updatePref(noneuStatusMaangement));*/
+		crfEntity.setId(deal.getId());
 		return crfEntity;
 
 	}
@@ -590,6 +601,22 @@ public class TransistionService {
 		return parent;
 	}
 	
+	static {
+		prop = new Properties();
+		InputStream input = null;
+		try {
+		    input = ClassLoader.getSystemClassLoader().getResourceAsStream("crf.properties");
+		    prop.load(input);
+		    System.out.println("loaded properties");
+		    Set<Entry<Object, Object>> entries = prop.entrySet();
+		    for(Entry<Object, Object> each : entries) {
+		    	System.out.println(each.getKey()+":"+each.getValue());
+		    }
+		} catch (IOException io) {
+		    io.printStackTrace();
+		}
+	}
+	
 	@Autowired
 	ContactUsRepo contactUsRepo;
 	@Autowired
@@ -602,4 +629,5 @@ public class TransistionService {
 	JourneyRepo journeyRepo;
 	private static final String MS_EXCEL = "application/vnd.ms-excel";
 	private static final String ATTACHMENT_FILE = "attachment; filename=";
+	private static final String DEFAULT_JSON = "{\"test\":\"test\"}";
 }

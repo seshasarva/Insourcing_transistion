@@ -2,17 +2,19 @@ package com.insourcing.services;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Random;
+import java.util.Properties;
+import java.util.Set;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +26,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.insourcing.entity.DealAttachment;
+import com.insourcing.entity.DealCounter;
 import com.insourcing.entity.DealEntity;
 import com.insourcing.entity.HRLoginEntity;
 import com.insourcing.model.DealFileAttachment;
-import com.insourcing.entity.DealAttachment;
 import com.insourcing.repository.DealAttachmentRepo;
+import com.insourcing.repository.DealCounterRepo;
 import com.insourcing.repository.DealsRepo;
 import com.insourcing.repository.HRLoginRepo;
 
 @Service
 public class DealsService {
-
+	static Properties prop;
 	@Autowired
 	DealsRepo repo;
 
@@ -48,7 +51,8 @@ public class DealsService {
 
 	@Value("${insource.app.deals.countries}")
 	private String countries;
-
+	@Autowired
+	DealCounterRepo counterRepo;
 	ObjectMapper mapper = new ObjectMapper();
 	private List<String> fileFieldsList = new ArrayList<>(Arrays.asList("exceptionApprovedFile", "hrCostingTenetsFile",
 			"hrSolutionTenetsFile", "dealSolutionSummaryFile", "peopleTransitionJoinersDataFile", "dealAttachments"));
@@ -91,12 +95,19 @@ public class DealsService {
 	public boolean create(DealEntity deal, String emailId) {
 		String username = getUserName(emailId);
 		System.out.println("username is: " + username);
-		Random random =  new Random();
-		int randomId = random.nextInt(10000); 
-		if(null == deal.getId())
-		deal.setId("DL"+randomId);
-		//deal.setDealLead(username);
-		//deal.setHrTransitionManager(username);
+		if(null == deal.getId()) {
+			DealCounter counter = fetchCounter();
+			String id = populateId(deal);			
+			if(null != counter) {
+				int value = counter.getValue();	
+				String dealId = "DL"+id+value;
+				deal.setId(dealId);
+				System.out.print("Generated deal"+deal.getId());
+				counter.setValue(value+1);
+				counterRepo.save(counter);				
+			}
+		}
+		
 		Calendar canlendar = Calendar.getInstance();
 		if (null == deal.getId()) {
 			deal.setCreatedTime(canlendar.getTime());
@@ -244,6 +255,38 @@ public class DealsService {
 		dealAttachmentRepo.deleteById(id);
 		System.out.println("deleted the id successfully------" + id);
 		return id;
+	}
+	
+	public String populateId(DealEntity deal) {
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		String yearValue = (year+"").substring(2);
+		String location = (String) prop.get(deal.getDealLocation().toLowerCase());
+		 return yearValue+location;
+	}
+	
+	public DealCounter fetchCounter() {
+		Optional<DealCounter> value = counterRepo.findById("deal_counter");
+		if(null != value && value.isPresent()) {
+			return value.get();
+		}
+		return null;
+	}
+	
+	static {
+		prop = new Properties();
+		InputStream input = null;
+		try {
+		    input = ClassLoader.getSystemClassLoader().getResourceAsStream("isd.properties");
+		    prop.load(input);
+		    System.out.println("loaded properties");
+		    Set<Entry<Object, Object>> entries = prop.entrySet();
+		    for(Entry<Object, Object> each : entries) {
+		    	System.out.println(each.getKey()+":"+each.getValue());
+		    }
+		} catch (IOException io) {
+		    io.printStackTrace();
+		}
 	}
 
 	private static final String MS_EXCEL = "application/vnd.ms-excel";

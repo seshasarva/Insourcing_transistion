@@ -28,10 +28,15 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.insourcing.entity.CandidateEntityMap;
+import com.insourcing.entity.DealCounter;
+
 import com.insourcing.entity.RecruiterProfileEntity;
 import com.insourcing.model.HRFormRequest;
 import com.insourcing.repository.CandidateRepo;
+import com.insourcing.repository.DealCounterRepo;
+
 import com.insourcing.repository.HRLoginRepo;
+import com.insourcing.services.DealsService;
 import com.insourcing.services.HRService;
 import com.insourcing.services.TransistionService;
 
@@ -43,6 +48,10 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 	
 	@Autowired
 	HRService hrService;
+	@Autowired
+	DealCounterRepo repo;
+	@Autowired
+	DealsService dealService;
 	@Autowired
 	TransistionService transistionService;
 	private static Logger log = LogManager.getLogger(InsourcingApplication.class);
@@ -118,6 +127,9 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 			HRFormRequest request = new HRFormRequest("1", "test", "test@tcs.com", "Test@123", "INDIA");
 			hrService.register(request );
 			try {
+				DealCounter counter = new DealCounter();
+				counter.setName("deal_counter");
+				counter.setValue(10000);repo.save(counter);
 			CandidateEntityMap map = new CandidateEntityMap();	
 			map.setEmailid("mail1");map.setDealId("DL2025");map.setOfferStatus("Joined");
 			map.setFirstname("fn");map.setLastname("ln");
@@ -144,6 +156,8 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 			
 			String filter1 = "{\"status\":\"All\",\"client\":\"c1\"}";
 			transistionService.fetchRecruiterDetails(filter1, "test@tcs.com");
+			
+			//dealService.readProperties(null);
 			//System.exit(0);
 			Path path = Paths.get("C:/component.png");
 		    byte[] data = Files.readAllBytes(path);
