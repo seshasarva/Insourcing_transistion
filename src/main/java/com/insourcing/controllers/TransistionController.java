@@ -91,6 +91,11 @@ public class TransistionController {
 		return service.uploadJourneyAttachments(file, id, fieldName);
 	}
 	
+	@GetMapping("/getDealGeography")
+	public String fetchDealGeography(@RequestParam String id) {
+		return service.fetchDealGeography(id);
+	}
+	
 	@GetMapping("/fetchCrf")
 	public CRFEntity fetchCrf(@RequestParam String id) throws JsonMappingException, JsonProcessingException {
 		return service.fetchCrf(id);
@@ -142,7 +147,7 @@ public class TransistionController {
 	}
 	
 	@PostMapping("/uploadRecruiterProfileImg")
-	public boolean uploadRecruiterProfileImg(@RequestPart("file") MultipartFile file,
+	public RecruiterProfileEntity uploadRecruiterProfileImg(@RequestPart("file") MultipartFile file,
 			@RequestParam int id) {
 		return service.uploadRecruiterProfileImage(id, file);
 	}

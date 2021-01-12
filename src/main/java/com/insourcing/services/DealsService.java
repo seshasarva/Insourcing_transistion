@@ -269,8 +269,12 @@ public class DealsService {
 		Optional<DealCounter> value = counterRepo.findById("deal_counter");
 		if(null != value && value.isPresent()) {
 			return value.get();
+		}else {
+			DealCounter counter = new DealCounter();
+			counter.setName("deal_counter");
+			counter.setValue(10000);counterRepo.save(counter);
+			return counter;
 		}
-		return null;
 	}
 	
 	static {

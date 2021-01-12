@@ -127,17 +127,17 @@ public class InsourcingApplication extends SpringBootServletInitializer {
 			HRFormRequest request = new HRFormRequest("1", "test", "test@tcs.com", "Test@123", "INDIA");
 			hrService.register(request );
 			try {
-				DealCounter counter = new DealCounter();
-				counter.setName("deal_counter");
-				counter.setValue(10000);repo.save(counter);
+				//DealCounter counter = new DealCounter();
+				//counter.setName("deal_counter");
+				//counter.setValue(10000);repo.save(counter);
 			CandidateEntityMap map = new CandidateEntityMap();	
-			map.setEmailid("mail1");map.setDealId("DL2025");map.setOfferStatus("Joined");
+			map.setEmailid("mail1");map.setDealId("DL219110000");map.setOfferStatus("Joined");
 			map.setFirstname("fn");map.setLastname("ln");
 			CandidateEntityMap map1 = new CandidateEntityMap();	
-			map1.setEmailid("mail2");map1.setDealId("DL6999");map1.setOfferStatus("acc");
+			map1.setEmailid("mail2");map1.setDealId("DL219110001");map1.setOfferStatus("Offer_Progress");
 			map1.setFirstname("fn");map1.setLastname("ln");
 			CandidateEntityMap map2 = new CandidateEntityMap();	
-			map2.setEmailid("mail3");map2.setDealId("DL9443");map2.setOfferStatus("dec");
+			map2.setEmailid("mail3");map2.setDealId("DL219110002");map2.setOfferStatus("Offer_Acceptance_Pending");
 			map2.setFirstname("fn");map2.setLastname("ln");
 			CandidateEntityMap map3 = new CandidateEntityMap();	
 			map3.setEmailid("mail4");map3.setDealId("DL3977");map3.setOfferStatus("in progress");

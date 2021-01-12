@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Map.Entry;
-
+import java.util.Iterator;
 import javax.transaction.Transactional;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -207,7 +207,7 @@ public class TransistionService {
 		
 		ContactUsId contactUsId = new ContactUsId(id, tileName);
 		Optional<ContactUsEntity> entity = contactUsRepo.findById(contactUsId);
-		if(null != entity && null != entity.get()) {
+		if(null != entity && entity.isPresent()) {
 			contactUs = entity.get();
 		}
 		return contactUs;		
@@ -216,7 +216,7 @@ public class TransistionService {
 	
 	public JourneyEntity fetchMyJourneyDetails(String id) {
 		Optional<JourneyEntity> entity = journeyRepo.findById(id);
-		if(null != entity && null != entity.get()) {
+		if(null != entity && entity.isPresent()) {
 			JourneyEntity journeyEntity = entity.get();
 			journeyEntity.setChecklist(null);
 			journeyEntity.setInductionVideo(null);
@@ -321,12 +321,27 @@ public class TransistionService {
 		}
 	}
 	
+	public String fetchDealGeography(String id) {
+		String country="";
+		Optional<DealEntity> dealOpt = repo.findById(id);
+		if(null == dealOpt || !dealOpt.isPresent()) return null;
+		DealEntity deal = repo.findById(id).get();
+		country = deal.getGeographyWithInScope();
+		System.out.println("country is----"+country);
+		return country;
+	}
+	
 
 	
 	public InterviewScheduleEntity fetchInterviewSchedule(String id) {
 		Optional<InterviewScheduleEntity> deal = interviewScheduleRepo.findById(id);
-		if(null != deal && null != deal.get()) {
+		try{
+		if(null != deal &&  deal.isPresent()) {
 			return deal.get();
+		}
+		}
+		catch(Exception e){
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -342,7 +357,9 @@ public class TransistionService {
 			XSSFSheet sheet = wb.getSheetAt(0);
 			ObjectMapper objectMapper = new ObjectMapper();
 		    ArrayNode arrayNode = objectMapper.createArrayNode();
-	
+		    Optional<InterviewScheduleEntity> deal = interviewScheduleRepo.findById(id);
+		    
+			
 			for(Row row : sheet) {
 				if(row.getRowNum()==0) continue;
 				//start date,end date, empid, name, grade, tr/hr/mr
@@ -356,9 +373,28 @@ public class TransistionService {
 				arrayNode.add(parentNode);
 	
 			}
-			InterviewScheduleEntity entity = new InterviewScheduleEntity();
+			InterviewScheduleEntity entity = null;
+			if(null != deal && null != deal.get()) {
+				entity = deal.get(); 
+				JsonNode tree = objectMapper.readTree(entity.getData());
+				if(tree.isArray()) {
+					ArrayNode arrTree = (ArrayNode)tree;
+					Iterator<JsonNode> it = arrayNode.iterator();
+					while(it.hasNext()) {
+						arrTree.add(it.next());
+					}
+					entity.setData(arrTree.toString());
+
+				}
+				
+			}else {
+				entity = new InterviewScheduleEntity();
+				entity.setData(arrayNode.toString());
+
+			}
 			entity.setId(id);
-			entity.setData(arrayNode.toString());
+
+			
 			System.out.println("the node is---"+arrayNode.toString());
 			interviewScheduleRepo.save(entity);
 		}catch(Exception e) {
@@ -422,11 +458,11 @@ public class TransistionService {
 		DealEntity deal = repo.findById(id).get();
 		
 		CRFEntity crfEntity = new CRFEntity();
-		ObjectMapper objectMapper = new ObjectMapper();
+		/*ObjectMapper objectMapper = new ObjectMapper();
 		ObjectNode euStatusMangement = objectMapper.createObjectNode();
 		ObjectNode euApplForm = objectMapper.createObjectNode();
 		ObjectNode noneuStatusMaangement = objectMapper.createObjectNode();
-		ObjectNode noneuApplForm = objectMapper.createObjectNode();
+		ObjectNode noneuApplForm = objectMapper.createObjectNode();*/
 		
 		crfEntity.setApplicationForm(prop.getProperty(deal.getGeographyWithInScope()));
 		crfEntity.setStatusManagement(DEFAULT_JSON);
@@ -438,6 +474,7 @@ public class TransistionService {
 		return crfEntity;
 
 	}
+	
 	
 	public String updatePref(ObjectNode json) {
 		/*ObjectMapper objectMapper = new ObjectMapper();
@@ -468,42 +505,53 @@ public class TransistionService {
 	}
 	
 	public boolean saveRecruiterProfile(List<RecruiterProfileEntity> requestEntities) {
+		
 		for(RecruiterProfileEntity requestEntity : requestEntities) {
 			Optional<RecruiterProfileEntity> entity = recruiterProfileRepo.findById(requestEntity.getId());
 			RecruiterProfileEntity recruiterProfileEntity;
 			if(null !=entity && entity.isPresent()) {
 				recruiterProfileEntity = entity.get();
+								recruiterProfileRepo.deleteEntry(requestEntity.getId());
+
+				
 			}else {
 				recruiterProfileEntity = new RecruiterProfileEntity();
 				recruiterProfileEntity.setId(requestEntity.getId());
 			}
-			requestEntity.setContactNo(requestEntity.getContactNo());
-			requestEntity.setCountry(requestEntity.getCountry());
-			requestEntity.setMail(requestEntity.getMail());
-			requestEntity.setName(requestEntity.getName());
-			recruiterProfileRepo.save(requestEntity);
+			recruiterProfileEntity.setContactNo(requestEntity.getContactNo());
+			recruiterProfileEntity.setCountry(requestEntity.getCountry());
+			recruiterProfileEntity.setMail(requestEntity.getMail());
+			recruiterProfileEntity.setName(requestEntity.getName());
+			recruiterProfileEntity.setEnabled(requestEntity.isEnabled());
+			recruiterProfileRepo.save(recruiterProfileEntity);
 		}
 		return true;
 	}
 	
-	public boolean uploadRecruiterProfileImage(int index, MultipartFile file) {
+	public RecruiterProfileEntity uploadRecruiterProfileImage(int index, MultipartFile file)  {
 		Optional<RecruiterProfileEntity> entity = recruiterProfileRepo.findById(index);
 		RecruiterProfileEntity recruiterProfileEntity;
+		byte[] b = null;
 		try {
+			b = file.getBytes();
 			if(null !=entity && entity.isPresent()) {
 				recruiterProfileEntity = entity.get();
+								recruiterProfileRepo.deleteEntry(index);
+
+
 			}else {
 				recruiterProfileEntity = new RecruiterProfileEntity();
 				recruiterProfileEntity.setId(index);
 			}
 			recruiterProfileEntity.setFileName(file.getOriginalFilename());
 			recruiterProfileEntity.setImg(file.getBytes());
+
 			recruiterProfileRepo.save(recruiterProfileEntity);
 		}catch(Exception e) {
 			e.printStackTrace();
-			return false;
+			return null;
 		}
-		return true;
+		return recruiterProfileEntity;
 		
 	}
 	
@@ -549,7 +597,9 @@ public class TransistionService {
 		List<DealEntity> allDeals = repo.findDealsByLead(userName);
 		ObjectNode chartNode = mapper.createObjectNode();
 		ArrayNode array = mapper.createArrayNode();
-		parent.set("chart", chartNode);
+		ObjectNode finalChartNode = mapper.createObjectNode();
+
+		parent.set("chart", finalChartNode);
 		parent.set("clients", array);
 		array.add("All");
 		int allAdditions = 0;
@@ -572,7 +622,7 @@ public class TransistionService {
 				continue;
 			}
 			
-			if(deal.getDealStatus().equalsIgnoreCase("open")) activeCount++;
+			if(deal.getDealStatus().equalsIgnoreCase("active")) activeCount++;
 			List<CandidateEntityMap> allCandidates = candidateRepo.findByDealId(deal.getId());
 			System.out.println("current deal"+allCandidates.size()+":"+deal.getId());
 			allAdditions = allAdditions+allCandidates.size();
@@ -588,6 +638,18 @@ public class TransistionService {
 					chartNode.put(candidateEntity.getOfferStatus(), ++value);
 				}
 			}
+		}
+		Iterator<Entry<String, JsonNode>> fieldsIt = chartNode.fields();
+		int count = 0;
+		while(fieldsIt.hasNext()) {
+			Entry<String, JsonNode> entry = fieldsIt.next();
+			count = count+entry.getValue().asInt();
+		}
+		Iterator<Entry<String, JsonNode>> fieldsIt1 = chartNode.fields();
+		 while(fieldsIt1.hasNext()) {
+				Entry<String, JsonNode> entry = fieldsIt1.next();
+
+			 finalChartNode.put(entry.getKey(), (entry.getValue().asInt()*100)/count);
 		}
 		parent.put("active", activeCount);
 		parent.put("total", allAdditions);
@@ -629,5 +691,5 @@ public class TransistionService {
 	JourneyRepo journeyRepo;
 	private static final String MS_EXCEL = "application/vnd.ms-excel";
 	private static final String ATTACHMENT_FILE = "attachment; filename=";
-	private static final String DEFAULT_JSON = "{\"test\":\"test\"}";
+	private static final String DEFAULT_JSON ="{\"emailid\":\"\",\"contactno\":\"\",\"title\":\"\",\"currentTitle\":\"\",\"firstname\":\"\",\"middlename\":\"\",\"lastname\":\"\",\"skills\":\"\",\"dateOfBirth\":\"\",\"currentLocation\":\"\",\"password\":\"\",\"confirmPassword\":\"\",\"newFields\":[]}";
 }

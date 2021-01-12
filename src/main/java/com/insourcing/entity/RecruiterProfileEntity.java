@@ -22,6 +22,8 @@ public class RecruiterProfileEntity {
 	private byte[] img;
 	@Column(name = "file_name")
 	private String fileName;
+	@Column(name = "enabled")
+	private boolean isEnabled;
 	public int getId() {
 		return id;
 	}
@@ -63,6 +65,12 @@ public class RecruiterProfileEntity {
 	}
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 	
 	
